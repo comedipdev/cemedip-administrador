@@ -1,0 +1,156 @@
+<div class="bg-surface-50 flex min-h-screen flex-col">
+  <app-top-bar />
+
+  <main class="grow px-4 py-8 md:px-8 md:py-12">
+    <section class="mx-auto flex max-w-6xl flex-col gap-10">
+      <div
+        class="flex flex-col gap-5 md:flex-row md:items-start md:justify-between"
+        aria-labelledby="training-page-title"
+      >
+        <div class="space-y-3">
+          <p class="text-primary-300 text-sm font-semibold tracking-[0.18em] uppercase">
+            Panel de práctica
+          </p>
+          <h1
+            id="training-page-title"
+            class="text-primary-900 text-4xl font-bold tracking-tight md:text-5xl"
+          >
+            TRAINING
+          </h1>
+        </div>
+
+        <p-button
+          label="HISTORIAL"
+          severity="secondary"
+          variant="outlined"
+          (click)="goToHistory()"
+          [pt]="headerActionPt"
+        />
+      </div>
+
+      <form [formGroup]="trainingForm" (ngSubmit)="startTraining()" class="space-y-10">
+        <div class="grid gap-6 xl:grid-cols-3 xl:gap-10">
+          <app-form-field id="training-specialty" label="ESPECIALIDAD">
+            <p-multiselect
+              inputId="training-specialty"
+              formControlName="specialty"
+              [options]="specialties()"
+              [loading]="loading()"
+              [invalid]="specialtyInvalid()"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Elige una o varias especialidades"
+              [filter]="true"
+              filterPlaceHolder="Buscar especialidad"
+              [showToggleAll]="false"
+              [showClear]="true"
+              [maxSelectedLabels]="2"
+              selectedItemsLabel="{0} especialidades seleccionadas"
+              fluid
+              size="large"
+              variant="filled"
+              [pt]="multiselectPt"
+            />
+            @if (specialtyInvalid()) {
+              <small class="app-form-error">Debes elegir al menos una especialidad</small>
+            }
+          </app-form-field>
+
+          <app-form-field id="training-type" label="TIPO">
+            <p-multiselect
+              inputId="training-type"
+              formControlName="type"
+              [options]="availableTypes()"
+              [loading]="loading()"
+              [invalid]="typeInvalid()"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Elige uno o varios tipos"
+              [filter]="true"
+              filterPlaceHolder="Buscar tipo"
+              [showToggleAll]="false"
+              [showClear]="true"
+              [maxSelectedLabels]="2"
+              selectedItemsLabel="{0} tipos seleccionados"
+              emptyMessage="No hay tipos disponibles"
+              emptyFilterMessage="No se encontraron tipos"
+              fluid
+              size="large"
+              variant="filled"
+              [pt]="multiselectPt"
+            />
+            @if (typeInvalid()) {
+              <small class="app-form-error">Debes elegir al menos un tipo</small>
+            }
+          </app-form-field>
+
+          <app-form-field id="training-topic" label="TEMA">
+            <p-multiselect
+              inputId="training-topic"
+              formControlName="topic"
+              [options]="availableTopics()"
+              [loading]="loading()"
+              [invalid]="topicInvalid()"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Elige uno o varios temas"
+              [filter]="true"
+              filterPlaceHolder="Buscar tema"
+              [showToggleAll]="false"
+              [showClear]="true"
+              [maxSelectedLabels]="2"
+              selectedItemsLabel="{0} temas seleccionados"
+              emptyMessage="No hay temas disponibles"
+              emptyFilterMessage="No se encontraron temas"
+              fluid
+              size="large"
+              variant="filled"
+              [pt]="multiselectPt"
+            />
+            @if (topicInvalid()) {
+              <small class="app-form-error">Debes elegir al menos un tema</small>
+            }
+          </app-form-field>
+        </div>
+
+        <section aria-labelledby="training-question-count-title" class="space-y-5">
+          <h2
+            id="training-question-count-title"
+            class="text-primary-900 text-lg font-semibold tracking-[0.08em] uppercase"
+          >
+            Número de preguntas
+          </h2>
+
+          <app-option-grid
+            formControlName="questionCount"
+            [options]="questionOptions()"
+            ariaLabelledBy="training-question-count-title"
+          />
+        </section>
+
+        <div class="flex justify-center pt-6">
+          <p-button
+            type="submit"
+            label="INICIAR"
+            [disabled]="!canStart()"
+            [loading]="isStarting()"
+            [pt]="primaryActionPt"
+          />
+        </div>
+      </form>
+
+      @if (submittedSelection(); as selection) {
+        <section class="border-primary-100 bg-surface-0 rounded-3xl border p-6 shadow-sm">
+          <h2 class="text-primary-900 text-lg font-semibold tracking-[0.08em] uppercase">
+            Configuración lista
+          </h2>
+          <p class="text-surface-700 mt-3 text-sm leading-7 md:text-base">
+            {{ formatSelectionSummary(selection.specialties) }} /
+            {{ formatSelectionSummary(selection.types) }} /
+            {{ formatSelectionSummary(selection.topics) }} / {{ selection.questionCount }} preguntas
+          </p>
+        </section>
+      }
+    </section>
+  </main>
+</div>

@@ -1,0 +1,28 @@
+<div class="bg-surface-50 flex min-h-screen flex-col">
+  <app-top-bar />
+
+  <main class="grow p-4 md:p-8">
+    <div class="mx-auto max-w-7xl">
+      <div class="mb-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-12">
+        <app-action-card label="TRAINING" icon="pi pi-pencil" (cardClick)="goToTraining()" />
+        <app-action-card label="EXAMEN" icon="pi pi-desktop" />
+      </div>
+
+      <section>
+        <h2 class="text-primary-900 mb-6 text-3xl font-black tracking-tight uppercase">PROGRESO</h2>
+
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          @for (item of progressItems(); track $index) {
+            <app-progress-card
+              [title]="item.title"
+              [specialty]="item.specialty"
+              [topic]="item.topic"
+              [date]="item.date"
+              [percentage]="item.percentage"
+            />
+          }
+        </div>
+      </section>
+    </div>
+  </main>
+</div>

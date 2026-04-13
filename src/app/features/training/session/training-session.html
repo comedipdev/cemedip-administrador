@@ -1,0 +1,115 @@
+<div class="bg-surface-0 flex min-h-screen flex-col">
+  <app-top-bar />
+
+  <main class="grow px-4 py-8 md:px-8 md:py-12">
+    <div class="mx-auto max-w-4xl space-y-10">
+      <div class="flex flex-col items-center gap-6">
+        <div class="text-center">
+          <p class="text-surface-500 text-sm font-semibold tracking-[0.15em] uppercase">
+            TIEMPO TRANSCURRIDO: <span class="text-surface-900">{{ formattedTime() }}</span>
+          </p>
+        </div>
+
+        <div class="w-full max-w-lg">
+          <p-progressbar [value]="progress()" [showValue]="false" [pt]="progressBarPt" />
+        </div>
+      </div>
+
+      <div class="min-h-100">
+        <app-question
+          [question]="currentQuestion() ?? null"
+          [loading]="isLoading()"
+          [submitting]="isSubmitting()"
+          [number]="currentQuestionIndex()"
+          [isAnswered]="isAnswered()"
+          [selectedOptionId]="selectedOptionId()"
+          (selectOptionChange)="selectOption($event)"
+        />
+
+        @if (isAnswered() && !isLoading()) {
+          <div class="flex justify-center pt-8">
+            <p-button
+              [label]="currentQuestionIndex() === totalQuestions() ? 'FINALIZAR' : 'SIGUIENTE'"
+              (click)="nextQuestion()"
+              severity="primary"
+              class="h-14 min-w-52"
+              [loading]="isFinishing()"
+              [pt]="{
+                label: { class: 'uppercase font-semibold tracking-wider px-10' },
+              }"
+            />
+          </div>
+        }
+      </div>
+    </div>
+  </main>
+</div>
+
+<p-dialog
+  [visible]="showResultModal()"
+  (visibleChange)="showResultModal.set($event)"
+  [modal]="true"
+  [closable]="false"
+  [resizable]="false"
+  [draggable]="false"
+  [pt]="{
+    mask: { class: 'app-dialog-mask' },
+    root: { class: 'w-full max-w-xl border-none' },
+    content: {
+      class:
+        'relative flex flex-col items-center gap-6 overflow-hidden rounded-3xl bg-surface-0 p-8 lg:p-12',
+    },
+  }"
+  [showHeader]="false"
+>
+  <div class="flex flex-col items-center gap-6 text-center">
+    <div
+      class="bg-primary-50 text-primary-500 flex h-20 w-20 items-center justify-center rounded-full"
+    >
+      <i class="pi pi-check-circle text-5xl"></i>
+    </div>
+
+    <div>
+      <h2
+        class="text-primary-900 mb-2 text-2xl font-extrabold tracking-tight uppercase lg:text-3xl"
+      >
+        TRAINING FINALIZADO
+      </h2>
+      <p class="text-surface-600 text-base font-medium">
+        Has completado todas las preguntas del entrenamiento.
+      </p>
+    </div>
+
+    @if (finishResult(); as result) {
+      <div class="bg-surface-50 grid w-full grid-cols-2 gap-4 rounded-2xl p-6">
+        <div class="flex flex-col items-center gap-1">
+          <span class="text-surface-500 text-xs font-semibold tracking-wider uppercase">
+            CORRECTAS
+          </span>
+          <span class="text-surface-900 text-2xl font-bold">
+            {{ result.correctas }} / {{ result.total_preguntas }}
+          </span>
+        </div>
+        <div class="flex flex-col items-center gap-1">
+          <span class="text-surface-500 text-xs font-semibold tracking-wider uppercase">
+            PUNTAJE
+          </span>
+          <span class="text-surface-900 text-2xl font-bold"> {{ result.porcentaje }}% </span>
+        </div>
+      </div>
+    }
+
+    <div class="flex w-full flex-col items-center pt-2">
+      <p-button
+        label="VOLVER AL INICIO"
+        [pt]="{
+          root: {
+            class:
+              'h-14 w-64 rounded-xl text-base font-bold tracking-widest uppercase shadow-md shadow-primary-200',
+          },
+        }"
+        (cardClick)="goToHome()"
+      />
+    </div>
+  </div>
+</p-dialog>

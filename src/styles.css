@@ -1,0 +1,41 @@
+@layer theme, base, primeng, components, utilities;
+
+@import 'tailwindcss';
+@import 'tailwindcss-primeui';
+@import 'primeicons/primeicons.css';
+
+@import './styles/motion.css';
+@import './styles/forms.css';
+@import './styles/ui.css';
+@import './app/features/auth/auth.css';
+
+@layer base {
+  :root {
+    --app-surface-app: var(--p-surface-50);
+    --app-surface-panel: var(--p-surface-0);
+    --app-text-default: var(--p-surface-700);
+    --app-text-on-brand: var(--p-primary-inverse-color);
+    --app-color-danger: var(--p-warn-color);
+    --app-color-danger-strong: color-mix(in srgb, var(--app-color-danger) 68%, black);
+    --app-color-danger-soft-bg: color-mix(in srgb, var(--app-color-danger) 10%, white);
+    --app-overlay-backdrop: color-mix(in srgb, var(--p-surface-950) 40%, transparent);
+  }
+
+  html,
+  body {
+    min-height: 100%;
+  }
+}
+
+@layer primeng {
+  html {
+    font-size: 16px;
+  }
+
+  body {
+    margin: 0;
+    font-family: Inter, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: var(--app-surface-app);
+    color: var(--app-text-default);
+  }
+}

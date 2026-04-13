@@ -1,0 +1,26 @@
+@layer components {
+  .app-form-error {
+    @apply mt-1 ml-2 block;
+    color: var(--app-color-danger);
+    animation: app-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .app-form-meta-link {
+    @apply text-primary-700 hover:text-primary-500 text-[10px] font-bold tracking-widest uppercase underline underline-offset-4 transition-colors;
+  }
+
+  .app-otp-slot {
+    @apply border-primary-400 text-primary-900 focus:border-primary-600 focus:ring-primary-100 mx-1.5 h-14 w-14 rounded-xl border-4 text-center text-3xl font-extrabold shadow-sm transition-all outline-none focus:ring-4 lg:h-16 lg:w-16;
+  }
+
+  .app-feedback-message {
+    @apply border-l-4 p-4;
+    animation: app-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .app-feedback-message-danger {
+    background-color: var(--app-color-danger-soft-bg);
+    border-inline-start-color: var(--app-color-danger);
+    color: var(--app-color-danger-strong);
+  }
+}

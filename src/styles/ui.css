@@ -1,0 +1,30 @@
+@layer components {
+  .app-section-kicker {
+    @apply text-surface-700 font-bold tracking-widest uppercase;
+  }
+
+  .app-dialog-mask {
+    background-color: var(--app-overlay-backdrop);
+    backdrop-filter: blur(4px);
+  }
+
+  .app-surface-panel {
+    background-color: var(--app-surface-panel);
+  }
+
+  .app-text-on-brand {
+    color: var(--app-text-on-brand);
+  }
+
+  .app-auth-title {
+    @apply text-primary-900 mb-2 text-3xl font-extrabold tracking-tight uppercase lg:text-4xl;
+  }
+
+  .app-auth-subtitle {
+    @apply text-surface-700 font-medium;
+  }
+
+  .app-back-link {
+    @apply text-surface-700 hover:text-primary inline-flex items-center gap-2 text-sm font-bold tracking-widest uppercase transition-colors;
+  }
+}
