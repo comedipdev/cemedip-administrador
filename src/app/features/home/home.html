@@ -1,41 +1,14 @@
-<div class="bg-surface-50 flex min-h-screen flex-col">
-  <app-top-bar />
-
-  <main class="grow p-4 md:p-8">
-    <div class="mx-auto max-w-7xl">
-      <div class="mb-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-12">
-        <app-action-card label="TRAINING" icon="pi pi-pencil" (cardClick)="goToTraining()" />
-        <app-action-card label="EXAMEN" icon="pi pi-desktop" />
-      </div>
-
-      <section>
-        <h2 class="text-primary-900 mb-6 text-3xl font-black tracking-tight uppercase">PROGRESO</h2>
-
-        @if (progressResource.isLoading()) {
-          <div class="flex justify-center py-12">
-            <i class="pi pi-spin pi-spinner text-primary text-4xl"></i>
-          </div>
-        } @else {
-          <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            @for (item of progressItems(); track item.id_intento) {
-              <app-progress-card
-                [title]="item.title"
-                [specialty]="item.specialty"
-                [topic]="item.topic"
-                [date]="(item.fecha_creacion | date: 'dd/MM/yyyy') ?? ''"
-                [percentage]="item.percentage"
-                actionLabel="REANUDAR"
-                (actionClick)="resumeTraining(item.id_intento)"
-              />
-            } @empty {
-              <div class="bg-surface-100 col-span-full rounded-2xl p-12 text-center">
-                <i class="pi pi-info-circle text-surface-400 mb-4 text-5xl"></i>
-                <p class="text-surface-600 text-lg font-medium">No tienes trainings en progreso.</p>
-              </div>
-            }
-          </div>
-        }
-      </section>
-    </div>
-  </main>
+<div class="relative overflow-hidden rounded-3xl shadow-sm" style="height: 420px;">
+  <img
+    src="assets/home_admin.png"
+    alt="Bienvenido"
+    class="h-full w-full object-cover object-center"
+  />
+  <div class="absolute inset-0 bg-gradient-to-l from-black/30 to-transparent"></div>
+  <div class="absolute right-10 bottom-10 text-right">
+    <p class="text-sm font-bold uppercase tracking-widest text-white/80">
+      {{ (user()?.tipo_usuario ?? 'Administrador') | uppercase }}
+    </p>
+    <p class="text-5xl font-light uppercase tracking-wider text-white">BIENVENIDO</p>
+  </div>
 </div>
