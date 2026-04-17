@@ -57,6 +57,7 @@ jobs:
             exit 1
           fi
 
+
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
@@ -184,6 +185,7 @@ jobs:
 
           find "$DEPLOY_PATH/releases" -mindepth 1 -maxdepth 1 -type d | sort | head -n -"${RELEASES_TO_KEEP}" | xargs -r rm -rf
           EOF
+
 
       - name: Verify deployed release contents
         env:
