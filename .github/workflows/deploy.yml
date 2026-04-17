@@ -1,4 +1,4 @@
-name: Deploy cemedip web
+name: Deploy cemedip administrador
 
 on:
   push:
@@ -7,17 +7,17 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: deploy-cemedip-web-production
+  group: deploy-cemedip-administrador-production
   cancel-in-progress: true
 
 permissions:
   contents: read
 
 env:
-  APP_NAME: cemedip-web
+  APP_NAME: cemedip-administrador
   NODE_VERSION: '24'
   DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
-  BUILD_OUTPUT: ${{ vars.BUILD_OUTPUT != '' && vars.BUILD_OUTPUT || 'dist/cemedip-web/browser' }}
+  BUILD_OUTPUT: ${{ vars.BUILD_OUTPUT != '' && vars.BUILD_OUTPUT || 'dist/cemedip-admin/browser' }}
   RELEASES_TO_KEEP: ${{ vars.RELEASES_TO_KEEP != '' && vars.RELEASES_TO_KEEP || '5' }}
   HEALTHCHECK_URL: ${{ vars.HEALTHCHECK_URL }}
   POST_ACTIVATE_COMMAND: ${{ vars.POST_ACTIVATE_COMMAND }}
@@ -71,17 +71,24 @@ jobs:
 
           npm --version
 
+
       - name: Install dependencies
         run: npm ci
+
+
 
       - name: Run lint
         run: npm run lint
 
+
+
       - name: Run tests
         run: npm run test -- --watch=false
 
+
       - name: Build Angular app
-        run: npm run build -- --configuration production --project cemedip-web
+        run: npm run build -- --configuration production --project cemedip-admin
+
 
       - name: Verify build output
         run: |
@@ -98,6 +105,8 @@ jobs:
             echo "No se encontro index.html en $BUILD_OUTPUT"
             exit 1
           fi
+
+
 
       - name: Generate release name
         run: echo "RELEASE=$(date -u +%Y%m%d-%H%M%S)-${GITHUB_SHA::7}" >> "$GITHUB_ENV"
@@ -187,3 +196,5 @@ jobs:
 
           ssh $SSH_OPTS "$SSH_USER@$SSH_HOST" \
             "test -f '$DEPLOY_PATH/current/index.html' && test -f '$DEPLOY_PATH/current/REVISION'"
+
+
