@@ -1,0 +1,140 @@
+<div class="flex flex-col gap-6">
+
+  <!-- Encabezado -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold uppercase tracking-wide text-surface-700">
+      &lsaquo; Estudiantes
+    </h1>
+    <p-button label="AGREGAR" icon="pi pi-plus" severity="success" />
+  </div>
+
+  <!-- Filtros -->
+  <div class="rounded-2xl bg-surface-0 p-6 shadow-sm">
+    <form [formGroup]="filtrosForm" (ngSubmit)="buscar()" class="flex flex-col gap-4">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-semibold uppercase tracking-wide text-surface-500">Nombre</label>
+          <input pInputText formControlName="nombres" placeholder="Nombre del estudiante" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-semibold uppercase tracking-wide text-surface-500">Apellido</label>
+          <input pInputText formControlName="apellidos" placeholder="Apellido del estudiante" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-semibold uppercase tracking-wide text-surface-500">Correo</label>
+          <input pInputText formControlName="correo_institucional" placeholder="Correo del estudiante" />
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <p-button type="submit" label="Buscar" [loading]="isLoading()" />
+        <p-button
+          type="button"
+          icon="pi pi-trash"
+          severity="secondary"
+          variant="outlined"
+          (click)="limpiar()"
+          [disabled]="isLoading()"
+        />
+      </div>
+    </form>
+  </div>
+
+  <!-- Error -->
+  @if (errorMessage()) {
+    <div class="app-feedback-message app-feedback-message-danger">
+      <p class="text-sm">{{ errorMessage() }}</p>
+    </div>
+  }
+
+  <!-- Tabla -->
+  <div class="rounded-2xl bg-surface-0 shadow-sm overflow-hidden">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="bg-primary text-white">
+          <th class="px-4 py-3 text-left font-semibold uppercase tracking-wide">ID</th>
+          <th class="px-4 py-3 text-left font-semibold uppercase tracking-wide">Nombre</th>
+          <th class="px-4 py-3 text-left font-semibold uppercase tracking-wide">Apellido</th>
+          <th class="px-4 py-3 text-left font-semibold uppercase tracking-wide hidden md:table-cell">Correo</th>
+          <th class="px-4 py-3 text-center font-semibold uppercase tracking-wide">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (isLoading()) {
+          @for (i of [1,2,3,4,5]; track i) {
+            <tr class="border-b border-surface-100">
+              <td colspan="5" class="px-4 py-4">
+                <div class="h-4 w-full animate-pulse rounded bg-surface-100"></div>
+              </td>
+            </tr>
+          }
+        } @else if (estudiantes().length === 0) {
+          <tr>
+            <td colspan="5" class="px-4 py-12 text-center text-surface-400">
+              <i class="pi pi-inbox mb-3 text-4xl block"></i>
+              No se encontraron estudiantes.
+            </td>
+          </tr>
+        } @else {
+          @for (est of estudiantes(); track est.id_estudiante) {
+            <tr class="border-b border-surface-100 transition-colors hover:bg-surface-50">
+              <td class="px-4 py-3 text-surface-500">{{ est.id_estudiante }}</td>
+              <td class="px-4 py-3 font-medium text-surface-700">
+                <div class="flex items-center gap-2">
+                  @if (est.foto_perfil) {
+                    <img [src]="est.foto_perfil" class="h-8 w-8 rounded-full object-cover flex-shrink-0" alt="" />
+                  } @else {
+                    <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                      {{ (est.nombres ?? '?')[0] }}
+                    </span>
+                  }
+                  {{ est.nombres }}
+                </div>
+              </td>
+              <td class="px-4 py-3 text-surface-700">{{ est.apellidos }}</td>
+              <td class="px-4 py-3 text-surface-500 hidden md:table-cell">{{ est.correo_institucional }}</td>
+              <td class="px-4 py-3">
+                <div class="flex items-center justify-center gap-2">
+                  <p-button icon="pi pi-eye" severity="info" variant="outlined" size="small"
+                    [pt]="{ root: { class: 'w-8 h-8' } }" />
+                  <p-button icon="pi pi-times" severity="danger" variant="outlined" size="small"
+                    [pt]="{ root: { class: 'w-8 h-8' } }" />
+                </div>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación -->
+  @if (paginador() && totalPaginas() > 1) {
+    <div class="flex items-center justify-center gap-1">
+      <p-button icon="pi pi-angle-double-left" variant="text" size="small"
+        [disabled]="paginaActual() === 1" (click)="irAPagina(1)"
+        [pt]="{ root: { class: 'w-9 h-9' } }" />
+      <p-button icon="pi pi-angle-left" variant="text" size="small"
+        [disabled]="paginaActual() === 1" (click)="irAPagina(paginaActual() - 1)"
+        [pt]="{ root: { class: 'w-9 h-9' } }" />
+
+      @for (pag of paginasVisibles(); track pag) {
+        @if (pag === paginaActual()) {
+          <p-button [label]="pag.toString()" size="small" (click)="irAPagina(pag)"
+            [pt]="{ root: { class: 'w-9 h-9' } }" />
+        } @else {
+          <p-button [label]="pag.toString()" variant="text" size="small" (click)="irAPagina(pag)"
+            [pt]="{ root: { class: 'w-9 h-9' } }" />
+        }
+      }
+
+      <p-button icon="pi pi-angle-right" variant="text" size="small"
+        [disabled]="paginaActual() === totalPaginas()" (click)="irAPagina(paginaActual() + 1)"
+        [pt]="{ root: { class: 'w-9 h-9' } }" />
+      <p-button icon="pi pi-angle-double-right" variant="text" size="small"
+        [disabled]="paginaActual() === totalPaginas()" (click)="irAPagina(totalPaginas())"
+        [pt]="{ root: { class: 'w-9 h-9' } }" />
+    </div>
+  }
+
+</div>

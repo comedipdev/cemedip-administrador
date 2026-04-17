@@ -6,6 +6,12 @@ export interface ApiSuccessResponse<T> {
   status: 'success' | string;
   data: T;
   total_data?: number;
+  data_paginador?: {
+    pagina_actual: number;
+    total_paginas: number;
+    total_registros: number;
+    por_pagina: number;
+  };
 }
 
 export interface ApiErrorResponse {

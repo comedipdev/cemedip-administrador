@@ -15,6 +15,11 @@ export const routes: Routes = [
         loadComponent: () => import('@features/home/home').then((m) => m.HomeComponent),
       },
       {
+        path: 'seguridad/estudiantes',
+        loadComponent: () =>
+          import('@features/seguridad/estudiantes/estudiantes').then((m) => m.EstudiantesComponent),
+      },
+      {
         path: '',
         redirectTo: 'home',
         pathMatch: 'full',
