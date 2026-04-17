@@ -8,9 +8,21 @@ import { TopBarComponent } from '@shared/components/top-bar/top-bar';
   imports: [RouterOutlet, SidebarComponent, TopBarComponent],
   template: `
     <div class="flex h-screen overflow-hidden bg-surface-50">
-      <app-sidebar [collapsed]="sidebarCollapsed()" />
+
+      @if (sidebarOpen()) {
+        <div
+          class="fixed inset-0 z-40 bg-black/40 lg:hidden"
+          (click)="sidebarOpen.set(false)"
+        ></div>
+      }
+
+      <app-sidebar
+        [open]="sidebarOpen()"
+        (navItemClick)="onNavItemClick()"
+      />
+
       <div class="flex flex-1 flex-col overflow-hidden">
-        <app-top-bar (toggleSidebar)="sidebarCollapsed.update((v) => !v)" />
+        <app-top-bar (toggleSidebar)="sidebarOpen.update((v) => !v)" />
         <main class="flex-1 overflow-auto p-6">
           <router-outlet />
         </main>
@@ -20,5 +32,11 @@ import { TopBarComponent } from '@shared/components/top-bar/top-bar';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminShellComponent {
-  protected readonly sidebarCollapsed = signal(false);
+  protected readonly sidebarOpen = signal(true);
+
+  protected onNavItemClick() {
+    if (window.innerWidth < 1024) {
+      this.sidebarOpen.set(false);
+    }
+  }
 }
