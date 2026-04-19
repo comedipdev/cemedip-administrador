@@ -20,6 +20,16 @@ export const routes: Routes = [
           import('@features/seguridad/estudiantes/estudiantes').then((m) => m.EstudiantesComponent),
       },
       {
+        path: 'seguridad/estudiantes/nuevo',
+        loadComponent: () =>
+          import('@features/seguridad/estudiante-form/estudiante-form').then((m) => m.EstudianteFormComponent),
+      },
+      {
+        path: 'seguridad/estudiantes/:id',
+        loadComponent: () =>
+          import('@features/seguridad/estudiante-form/estudiante-form').then((m) => m.EstudianteFormComponent),
+      },
+      {
         path: '',
         redirectTo: 'home',
         pathMatch: 'full',

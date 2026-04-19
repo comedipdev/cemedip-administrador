@@ -24,10 +24,10 @@ export const CemedipPT = {
   },
   select: {
     root: {
-      class: 'rounded-2xl shadow-none transition-colors',
+      class: 'rounded-xl shadow-none transition-colors border border-surface-200',
     },
     label: {
-      class: 'text-base font-medium text-surface-600',
+      class: 'flex items-center text-base font-medium text-surface-600',
     },
     dropdownIcon: {
       class: 'text-surface-500',

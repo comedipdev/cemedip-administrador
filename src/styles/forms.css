@@ -1,4 +1,16 @@
 @layer components {
+  .app-select-field {
+    @apply w-full h-14;
+  }
+
+  .app-form-busy {
+    @apply opacity-50 pointer-events-none select-none transition-opacity duration-200;
+  }
+
+  .app-input-readonly {
+    @apply bg-surface-100 text-surface-500 cursor-not-allowed;
+  }
+
   .app-form-error {
     @apply mt-1 ml-2 block;
     color: var(--app-color-danger);

@@ -4,6 +4,45 @@ export interface Estudiante {
   apellidos: string | null;
   correo_institucional: string;
   foto_perfil: string | null;
+  is_active: boolean;
+}
+
+export interface EstudianteDetalle {
+  id_estudiante: number;
+  tipo_identificacion: string | null;
+  identificacion: string | null;
+  nombres: string | null;
+  apellidos: string | null;
+  nombre_completo: string | null;
+  correo_institucional: string;
+  correo_personal: string | null;
+  telefono_convencional: string | null;
+  telefono_celular: string | null;
+  foto_perfil: string | null;
+  direccion: string | null;
+  fecha_nacimiento: string | null;
+  genero: string | null;
+  username: string;
+  is_active: boolean;
+}
+
+export interface EstudianteCreateInput {
+  tipo_identificacion?: string | null;
+  identificacion?: string | null;
+  nombres?: string | null;
+  apellidos?: string | null;
+  correo_institucional: string;
+  correo_personal?: string | null;
+  telefono_convencional?: string | null;
+  telefono_celular?: string | null;
+  direccion?: string | null;
+  fecha_nacimiento?: string | null;
+  genero?: string | null;
+}
+
+export interface EstudianteUpdateInput extends Omit<EstudianteCreateInput, 'correo_institucional'> {
+  correo_institucional?: string;
+  username?: string | null;
 }
 
 export interface Paginador {
@@ -20,4 +59,5 @@ export interface EstudiantesFiltros {
   apellidos?: string;
   correo_institucional?: string;
   id_estudiante?: number;
+  is_activo?: boolean;
 }

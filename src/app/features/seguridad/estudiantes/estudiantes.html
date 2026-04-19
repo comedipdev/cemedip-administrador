@@ -1,3 +1,5 @@
+<p-confirm-dialog />
+
 <div class="flex flex-col gap-6">
 
   <!-- Encabezado -->
@@ -5,7 +7,7 @@
     <h1 class="text-2xl font-bold tracking-wide text-surface-700">
       ESTUDIANTES
     </h1>
-    <p-button label="AGREGAR" icon="pi pi-plus-circle" severity="secondary"/>
+    <p-button label="AGREGAR" icon="pi pi-plus-circle" severity="secondary" routerLink="/seguridad/estudiantes/nuevo"/>
   </div>
 
   <!-- Filtros -->
@@ -23,6 +25,17 @@
         <div class="flex flex-col gap-1">
           <label class="text-xs font-semibold tracking-wide text-surface-500">CORREO</label>
           <input pInputText formControlName="correo_institucional" placeholder="Correo del estudiante" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-semibold tracking-wide text-surface-500">ESTADO</label>
+          <p-select
+            formControlName="is_activo"
+            [options]="estadoOpciones"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Estado"
+            styleClass="app-select-field"
+          />
         </div>
       </div>
 
@@ -55,6 +68,7 @@
           <th class="px-4 py-3">NOMBRES</th>
           <th class="px-4 py-3">APELLIDOS</th>
           <th class="px-4 py-3 hidden md:table-cell">CORREO</th>
+          <th class="px-4 py-3">ESTADO</th>
           <th class="px-4 py-3 hidden sm:table-cell">FOTO</th>
           <th class="px-4 py-3">ACCIÓN</th>
         </tr>
@@ -63,14 +77,14 @@
         @if (isLoading()) {
           @for (i of [1,2,3,4,5]; track i) {
             <tr class="bg-surface-200">
-              <td colspan="6" class="px-4 py-4">
+              <td colspan="7" class="px-4 py-4">
                 <div class="h-4 w-full animate-pulse rounded bg-surface-300"></div>
               </td>
             </tr>
           }
         } @else if (estudiantes().length === 0) {
           <tr class="bg-surface-200">
-            <td colspan="6" class="px-4 py-12  text-surface-400">
+            <td colspan="7" class="px-4 py-12  text-surface-400">
               <i class="pi pi-inbox mb-3 text-4xl block"></i>
               No se encontraron estudiantes.
             </td>
@@ -82,6 +96,14 @@
               <td class="px-4 py-3 ">{{ est.nombres }}</td>
               <td class="px-4 py-3 ">{{ est.apellidos }}</td>
               <td class="px-4 py-3  hidden md:table-cell">{{ est.correo_institucional }}</td>
+              <td class="px-4 py-3">
+                <span
+                  class="inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold"
+                  [class]="est.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
+                >
+                  {{ est.is_active ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
               <td class="px-4 py-3 hidden sm:table-cell">
                 <div class="flex justify-center">
                   @if (est.foto_perfil) {
@@ -96,9 +118,14 @@
               <td class="px-4 py-3">
                 <div class="flex items-center justify-center gap-2">
                   <p-button icon="pi pi-eye" severity="secondary" size="small"
-                    [pt]="{ root: { class: 'w-8 h-8' } }" />
+                    [pt]="{ root: { class: 'w-8 h-8' } }"
+                    (click)="verEstudiante(est.id_estudiante)"
+                  />
                   <p-button icon="pi pi-times" severity="danger" size="small"
-                    [pt]="{ root: { class: 'w-8 h-8' } }" />
+                    [pt]="{ root: { class: 'w-8 h-8' } }"
+                    [disabled]="!est.is_active"
+                    (click)="confirmarEliminar(est.id_estudiante, est.nombres + ' ' + est.apellidos)"
+                  />
                 </div>
               </td>
             </tr>

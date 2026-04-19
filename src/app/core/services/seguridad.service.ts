@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_BASE_URL } from '@core/constants/api';
 import { ApiSuccessResponse } from '@core/models/api.model';
-import { Estudiante, EstudiantesFiltros } from '@core/models/seguridad.model';
+import { Estudiante, EstudianteCreateInput, EstudianteDetalle, EstudiantesFiltros, EstudianteUpdateInput } from '@core/models/seguridad.model';
 
 @Injectable({ providedIn: 'root' })
 export class SeguridadService {
@@ -17,10 +17,45 @@ export class SeguridadService {
     if (filtros.apellidos) params = params.set('apellidos', filtros.apellidos);
     if (filtros.correo_institucional) params = params.set('correo_institucional', filtros.correo_institucional);
     if (filtros.id_estudiante) params = params.set('id_estudiante', filtros.id_estudiante);
+    if (filtros.is_activo !== undefined) params = params.set('is_activo', filtros.is_activo.toString());
 
     return this.http.get<ApiSuccessResponse<Estudiante[]>>(
       `${API_BASE_URL}/admin/seguridad/estudiantes/`,
       { params },
+    );
+  }
+
+  getEstudiante(id: number): Observable<ApiSuccessResponse<EstudianteDetalle>> {
+    return this.http.get<ApiSuccessResponse<EstudianteDetalle>>(
+      `${API_BASE_URL}/admin/seguridad/estudiantes/${id}/`,
+    );
+  }
+
+  crearEstudiante(data: EstudianteCreateInput): Observable<ApiSuccessResponse<EstudianteDetalle>> {
+    return this.http.post<ApiSuccessResponse<EstudianteDetalle>>(
+      `${API_BASE_URL}/admin/seguridad/estudiantes/`,
+      data,
+    );
+  }
+
+  actualizarEstudiante(id: number, data: EstudianteUpdateInput): Observable<ApiSuccessResponse<EstudianteDetalle>> {
+    return this.http.put<ApiSuccessResponse<EstudianteDetalle>>(
+      `${API_BASE_URL}/admin/seguridad/estudiantes/${id}/`,
+      data,
+    );
+  }
+
+  activarEstudiante(id: number): Observable<ApiSuccessResponse<{}>> {
+    return this.http.post<ApiSuccessResponse<{}>>(
+      `${API_BASE_URL}/admin/seguridad/estudiantes/${id}/activar/`,
+      {},
+    );
+  }
+
+  inactivarEstudiante(id: number): Observable<ApiSuccessResponse<{}>> {
+    return this.http.post<ApiSuccessResponse<{}>>(
+      `${API_BASE_URL}/admin/seguridad/estudiantes/${id}/inactivar/`,
+      {},
     );
   }
 }
