@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, input, output, signal } from '@angu
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
 
+
 @Component({
   selector: 'app-sidebar',
   imports: [RouterLink, RouterLinkActive, NgOptimizedImage],
@@ -71,17 +72,37 @@ import { NgOptimizedImage } from '@angular/common';
           }
         </div>
 
-        <a
-          routerLink="/evaluaciones/intentos"
-          routerLinkActive="bg-primary/10 text-primary font-semibold hover:bg-primary/20"
-          [title]="!open() ? 'Intentos' : ''"
-          class="flex items-center gap-3 mx-2 px-3 py-3 rounded-xl text-surface-600 transition-colors hover:bg-surface-100"
-          [class.justify-center]="!open()"
-          (click)="navItemClick.emit()"
-        >
-          <i class="pi pi-list-check text-lg flex-shrink-0"></i>
-          @if (open()) { <span class="text-sm">Intentos</span> }
-        </a>
+        <div>
+          <button
+            class="flex w-[calc(100%-16px)] items-center gap-3 mx-2 px-3 py-3 rounded-xl text-surface-600 transition-colors hover:bg-surface-100"
+            [class.justify-center]="!open()"
+            (click)="open() && toggleEvaluaciones()"
+          >
+            <i class="pi pi-file-check text-lg flex-shrink-0" [title]="!open() ? 'Evaluaciones' : ''"></i>
+            @if (open()) {
+              <span class="flex-1 text-left text-sm">Evaluaciones</span>
+              <i class="pi text-xs transition-transform duration-200"
+                [class]="evaluacionesOpen() ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+            }
+          </button>
+
+          @if (evaluacionesOpen() && open()) {
+            <div class="ml-4 flex flex-col gap-1 mt-1">
+              <a routerLink="/evaluaciones/examenes" routerLinkActive="text-primary font-semibold bg-primary/10 hover:bg-primary/20"
+                class="flex items-center gap-2 mx-2 px-3 py-2 rounded-xl text-sm text-surface-500 hover:bg-surface-100 hover:text-surface-700 transition-colors"
+                (click)="navItemClick.emit()">
+                <i class="pi pi-file text-sm"></i>
+                Exámenes
+              </a>
+              <a routerLink="/evaluaciones/intentos" routerLinkActive="text-primary font-semibold bg-primary/10 hover:bg-primary/20"
+                class="flex items-center gap-2 mx-2 px-3 py-2 rounded-xl text-sm text-surface-500 hover:bg-surface-100 hover:text-surface-700 transition-colors"
+                (click)="navItemClick.emit()">
+                <i class="pi pi-list-check text-sm"></i>
+                Intentos
+              </a>
+            </div>
+          }
+        </div>
 
       </nav>
     </aside>
@@ -93,8 +114,13 @@ export class SidebarComponent {
   readonly navItemClick = output<void>();
 
   protected readonly seguridadOpen = signal(true);
+  protected readonly evaluacionesOpen = signal(true);
 
   protected toggleSeguridad() {
     this.seguridadOpen.update((v) => !v);
+  }
+
+  protected toggleEvaluaciones() {
+    this.evaluacionesOpen.update((v) => !v);
   }
 }

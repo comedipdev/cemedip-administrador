@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_BASE_URL } from '@core/constants/api';
 import { ApiSuccessResponse } from '@core/models/api.model';
-import { Intento, IntentoDetalleAdmin, IntentosFiltros } from '@core/models/evaluaciones.model';
+import { Examen, ExamenesFiltros, Intento, IntentoDetalleAdmin, IntentosFiltros } from '@core/models/evaluaciones.model';
 
 @Injectable({ providedIn: 'root' })
 export class EvaluacionesService {
@@ -34,6 +34,33 @@ export class EvaluacionesService {
   eliminarIntento(id: number): Observable<ApiSuccessResponse<{}>> {
     return this.http.delete<ApiSuccessResponse<{}>>(
       `${API_BASE_URL}/admin/evaluaciones/intentos/${id}/`,
+    );
+  }
+
+  getExamenes(filtros: ExamenesFiltros): Observable<ApiSuccessResponse<Examen[]>> {
+    let params = new HttpParams();
+    if (filtros.page) params = params.set('page', filtros.page);
+    if (filtros.page_size) params = params.set('page_size', filtros.page_size);
+    if (filtros.nombre) params = params.set('nombre', filtros.nombre);
+    if (filtros.fecha_inicio) params = params.set('fecha_inicio', filtros.fecha_inicio);
+    if (filtros.fecha_fin) params = params.set('fecha_fin', filtros.fecha_fin);
+
+    return this.http.get<ApiSuccessResponse<Examen[]>>(
+      `${API_BASE_URL}/admin/evaluaciones/examenes/`,
+      { params },
+    );
+  }
+
+  eliminarExamen(id: number): Observable<ApiSuccessResponse<{}>> {
+    return this.http.delete<ApiSuccessResponse<{}>>(
+      `${API_BASE_URL}/admin/evaluaciones/examenes/${id}/`,
+    );
+  }
+
+  toggleActivoExamen(id: number): Observable<ApiSuccessResponse<{ es_activo: boolean }>> {
+    return this.http.patch<ApiSuccessResponse<{ es_activo: boolean }>>(
+      `${API_BASE_URL}/admin/evaluaciones/examenes/${id}/`,
+      {},
     );
   }
 }

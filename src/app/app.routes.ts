@@ -63,6 +63,11 @@ export const routes: Routes = [
           import('@features/evaluaciones/intentos/intentos').then((m) => m.IntentosComponent),
       },
       {
+        path: 'evaluaciones/examenes',
+        loadComponent: () =>
+          import('@features/evaluaciones/examenes/examenes').then((m) => m.ExamenesComponent),
+      },
+      {
         path: '',
         redirectTo: 'home',
         pathMatch: 'full',

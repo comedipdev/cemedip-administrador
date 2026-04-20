@@ -65,3 +65,27 @@ export interface IntentosFiltros {
   fecha_inicio?: string;
   fecha_fin?: string;
 }
+
+export interface Examen {
+  id_examen: number;
+  usuario_creacion: string | null;
+  nombre: string;
+  temas: string[];
+  estado_examen: 'proximo' | 'en_prgoreso' | 'finalizado';
+  puntaje_maximo: string;
+  numero_preguntas: number;
+  intentos_entregados: number;
+  fecha_inicio: string;
+  fecha_entrega: string;
+  duracion_minutos: number;
+  fecha_creacion: string;
+  es_activo: boolean;
+}
+
+export interface ExamenesFiltros {
+  page?: number;
+  page_size?: number;
+  nombre?: string;
+  fecha_inicio?: string;
+  fecha_fin?: string;
+}
