@@ -46,9 +46,9 @@ describe('PreguntasService', () => {
         enunciado: ' aborto ',
         alternativa: 'diferido',
         respuesta: 'Aborto diferido',
-        especialidad: 3,
-        tipo: 7,
-        tema: 11,
+        especialidad: [3],
+        tipo: [7],
+        tema: [11],
         feedback: ' uterino ',
       })
       .subscribe((result) => {
@@ -72,7 +72,7 @@ describe('PreguntasService', () => {
   });
 
   it('should request tipos for one especialidad', () => {
-    service.getTipos(5).subscribe();
+    service.getTipos([5]).subscribe();
 
     const req = httpTestingController.expectOne((request) => {
       return request.method === 'GET' && request.url === `${API_BASE_URL}/cliente/preguntas/tipos/`;
@@ -83,7 +83,7 @@ describe('PreguntasService', () => {
   });
 
   it('should request temas with especialidad and tipo params', () => {
-    service.getTemas(5, 9).subscribe();
+    service.getTemas([5], [9]).subscribe();
 
     const req = httpTestingController.expectOne((request) => {
       return request.method === 'GET' && request.url === `${API_BASE_URL}/cliente/preguntas/temas/`;

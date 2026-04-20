@@ -1,4 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { PreguntasComponent } from './preguntas';
@@ -62,7 +64,7 @@ describe('PreguntasComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [PreguntasComponent],
-      providers: [{ provide: PreguntasService, useValue: preguntasServiceMock }],
+      providers: [provideRouter([]), { provide: PreguntasService, useValue: preguntasServiceMock }, MessageService],
     }).compileComponents();
   });
 
@@ -106,9 +108,9 @@ describe('PreguntasComponent', () => {
       enunciado: 'aborto',
       alternativa: '',
       respuesta: '',
-      especialidad: 1,
-      tipo: null,
-      tema: null,
+      especialidad: [1],
+      tipo: [],
+      tema: [],
       feedback: '',
     });
 
@@ -122,7 +124,7 @@ describe('PreguntasComponent', () => {
       enunciado: 'aborto',
       alternativa: undefined,
       respuesta: undefined,
-      especialidad: 1,
+      especialidad: [1],
       tipo: null,
       tema: null,
       feedback: undefined,

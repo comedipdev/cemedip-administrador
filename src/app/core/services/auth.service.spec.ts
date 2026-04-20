@@ -36,6 +36,13 @@ describe('AuthService', () => {
     localStorage.clear();
   });
 
+  const mockUser: User = {
+    username: 'demo',
+    tipo_usuario: 'admin',
+    es_administrador: true,
+    nombre: 'Demo User',
+  };
+
   it('should be created', () => {
     const service = createService();
 
@@ -43,18 +50,13 @@ describe('AuthService', () => {
   });
 
   it('should initialize auth state from the persisted session', () => {
-    const user: User = {
-      username: 'demo',
-      nombre_completo: 'Demo User',
-    };
-
     localStorage.setItem('auth_token', 'persisted-token');
-    localStorage.setItem('auth_user', JSON.stringify(user));
+    localStorage.setItem('auth_user', JSON.stringify(mockUser));
 
     const service = createService();
 
     expect(service.isAuthenticated()).toBe(true);
-    expect(service.currentUser()).toEqual(user);
+    expect(service.currentUser()).toEqual(mockUser);
   });
 
   it('should ignore malformed persisted user payloads', () => {
@@ -67,35 +69,28 @@ describe('AuthService', () => {
     expect(service.currentUser()).toBeNull();
   });
 
-  it('should post login credentials, append the app identifier and persist the session', () => {
+  it('should post login credentials and persist the session', () => {
     const service = createService();
     const response: ApiSuccessResponse<LoginData> = {
       status: 'success',
       statusCode: 200,
       data: {
         token: 'jwt-token',
-        usuario: {
-          username: 'demo',
-          nombre_completo: 'Demo User',
-        },
+        usuario: mockUser,
       },
     };
 
     service.login({ username: 'demo', password: 'secret' }).subscribe((result) => {
       expect(result).toEqual(response);
       expect(service.isAuthenticated()).toBe(true);
-      expect(service.currentUser()).toEqual(response.data.usuario);
+      expect(service.currentUser()).toEqual(mockUser);
       expect(localStorage.getItem('auth_token')).toBe('jwt-token');
-      expect(localStorage.getItem('auth_user')).toBe(JSON.stringify(response.data.usuario));
+      expect(localStorage.getItem('auth_user')).toBe(JSON.stringify(mockUser));
     });
 
-    const req = httpTestingController.expectOne(`${API_BASE_URL}/cliente/seguridad/login/`);
+    const req = httpTestingController.expectOne(`${API_BASE_URL}/admin/seguridad/login/`);
     expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual({
-      username: 'demo',
-      password: 'secret',
-      aplicacion: 'app',
-    });
+    expect(req.request.body).toEqual({ username: 'demo', password: 'secret' });
     req.flush(response);
   });
 
@@ -106,10 +101,7 @@ describe('AuthService', () => {
       statusCode: 200,
       data: {
         token: '',
-        usuario: {
-          username: 'demo',
-          nombre_completo: 'Demo User',
-        },
+        usuario: mockUser,
       },
     };
 
@@ -121,52 +113,7 @@ describe('AuthService', () => {
       expect(localStorage.getItem('auth_user')).toBeNull();
     });
 
-    const req = httpTestingController.expectOne(`${API_BASE_URL}/cliente/seguridad/login/`);
-    req.flush(response);
-  });
-
-  it('should post the recover password request', () => {
-    const service = createService();
-    const response: ApiSuccessResponse<Record<string, never>> = {
-      status: 'success',
-      statusCode: 200,
-      data: {},
-    };
-
-    service.recoverPassword({ correo: 'demo@example.com' }).subscribe((result) => {
-      expect(result).toEqual(response);
-    });
-
-    const req = httpTestingController.expectOne(
-      `${API_BASE_URL}/cliente/seguridad/recuperar-contrasena/`,
-    );
-    expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual({ correo: 'demo@example.com' });
-    req.flush(response);
-  });
-
-  it('should post the confirm password request', () => {
-    const service = createService();
-    const response: ApiSuccessResponse<Record<string, never>> = {
-      status: 'success',
-      statusCode: 200,
-      data: {},
-    };
-
-    service
-      .confirmPassword({ token: 'otp-token', nueva_contrasena: 'NewPassword1!' })
-      .subscribe((result) => {
-        expect(result).toEqual(response);
-      });
-
-    const req = httpTestingController.expectOne(
-      `${API_BASE_URL}/cliente/seguridad/confirmar-recuperacion-contrasena/`,
-    );
-    expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual({
-      token: 'otp-token',
-      nueva_contrasena: 'NewPassword1!',
-    });
+    const req = httpTestingController.expectOne(`${API_BASE_URL}/admin/seguridad/login/`);
     req.flush(response);
   });
 
@@ -175,16 +122,13 @@ describe('AuthService', () => {
     const navigateSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
 
     localStorage.setItem('auth_token', 'persisted-token');
-    localStorage.setItem(
-      'auth_user',
-      JSON.stringify({ username: 'demo', nombre_completo: 'Demo User' } satisfies User),
-    );
+    localStorage.setItem('auth_user', JSON.stringify(mockUser));
     service.isAuthenticated.set(true);
-    service.currentUser.set({ username: 'demo', nombre_completo: 'Demo User' });
+    service.currentUser.set(mockUser);
 
     service.logout();
 
-    const req = httpTestingController.expectOne(`${API_BASE_URL}/cliente/seguridad/logout/`);
+    const req = httpTestingController.expectOne(`${API_BASE_URL}/admin/seguridad/logout/`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({});
     req.flush({

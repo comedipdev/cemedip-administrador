@@ -27,29 +27,14 @@ describe('TopBarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have menu items defined', () => {
-    expect(component['items'].length).toBeGreaterThan(0);
-  });
-
-  it('should toggle menu on hamburger button click', () => {
-    const menu = fixture.debugElement.query(By.css('p-menu')).componentInstance;
-    const toggleSpy = vi.spyOn(menu, 'toggle');
+  it('should emit toggleSidebar on hamburger button click', () => {
+    let emitted = false;
+    component.toggleSidebar.subscribe(() => (emitted = true));
     const button = fixture.debugElement.query(By.css('p-button[icon="pi pi-bars"]'));
 
     button.nativeElement.click();
 
-    expect(toggleSpy).toHaveBeenCalled();
-  });
-
-  it('should toggle user menu on profile button click', () => {
-    const menus = fixture.debugElement.queryAll(By.css('p-menu'));
-    const userMenu = menus[1].componentInstance;
-    const toggleSpy = vi.spyOn(userMenu, 'toggle');
-    const button = fixture.debugElement.query(By.css('p-button[icon="pi pi-user"]'));
-
-    button.nativeElement.click();
-
-    expect(toggleSpy).toHaveBeenCalled();
+    expect(emitted).toBe(true);
   });
 
   it('should call logout on sign-out button click', () => {
