@@ -147,6 +147,11 @@
               <td class="px-3 py-3">{{ intento.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</td>
               <td class="px-3 py-3">
                 <div class="flex items-center justify-center gap-2">
+                  <p-button icon="pi pi-eye" severity="secondary" size="small"
+                    [pt]="{ root: { class: 'w-8 h-8' } }"
+                    [disabled]="intento.estado_intento !== 'finalizado'"
+                    (click)="verDetalle(intento.id_intento)"
+                  />
                   <p-button icon="pi pi-times" severity="danger" size="small"
                     [pt]="{ root: { class: 'w-8 h-8' } }"
                     (click)="confirmarEliminar(intento.id_intento)"

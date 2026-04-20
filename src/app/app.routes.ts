@@ -53,6 +53,11 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'evaluaciones/intentos/:id',
+        loadComponent: () =>
+          import('@features/evaluaciones/intento-detalle/intento-detalle').then((m) => m.IntentoDetalleComponent),
+      },
+      {
         path: 'evaluaciones/intentos',
         loadComponent: () =>
           import('@features/evaluaciones/intentos/intentos').then((m) => m.IntentosComponent),

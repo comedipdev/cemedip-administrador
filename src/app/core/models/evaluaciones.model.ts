@@ -14,6 +14,48 @@ export interface Intento {
   fecha_creacion: string;
 }
 
+export interface IntentoEstudianteInfo {
+  tipo_identificacion: string | null;
+  identificacion: string | null;
+  nombres: string | null;
+  apellidos: string | null;
+  fecha_nacimiento: string | null;
+  username: string;
+}
+
+export interface IntentoDetalleAdmin {
+  estudiante: IntentoEstudianteInfo;
+  intento: {
+    id_intento: number;
+    estado: string;
+    correctas: number;
+    total_preguntas: number;
+    porcentaje: string;
+    puntaje_obtenido: string;
+    duracion_real: string;
+    fecha_finalizacion: string;
+  };
+  preguntas: IntentoHistoryQuestion[];
+}
+
+export interface IntentoHistoryQuestion {
+  id_pregunta: number;
+  enunciado: string;
+  orden: number;
+  id_intento_pregunta: number;
+  es_correcta: boolean;
+  es_sin_responder: boolean;
+  alternativas: {
+    id_alternativa_intento: number;
+    identificador_numerico: number;
+    identificador_letra: string;
+    contenido: string;
+    es_elegida?: boolean;
+    es_correcta?: boolean;
+  }[];
+  feedback?: { justificacion: string; fuente: string; justificacion_fuente: string } | null;
+}
+
 export interface IntentosFiltros {
   page?: number;
   page_size?: number;

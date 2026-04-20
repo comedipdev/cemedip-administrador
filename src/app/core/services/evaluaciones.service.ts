@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_BASE_URL } from '@core/constants/api';
 import { ApiSuccessResponse } from '@core/models/api.model';
-import { Intento, IntentosFiltros } from '@core/models/evaluaciones.model';
+import { Intento, IntentoDetalleAdmin, IntentosFiltros } from '@core/models/evaluaciones.model';
 
 @Injectable({ providedIn: 'root' })
 export class EvaluacionesService {
@@ -22,6 +22,12 @@ export class EvaluacionesService {
     return this.http.get<ApiSuccessResponse<Intento[]>>(
       `${API_BASE_URL}/admin/evaluaciones/intentos/`,
       { params },
+    );
+  }
+
+  getIntentoDetalle(id: number): Observable<ApiSuccessResponse<IntentoDetalleAdmin>> {
+    return this.http.get<ApiSuccessResponse<IntentoDetalleAdmin>>(
+      `${API_BASE_URL}/admin/evaluaciones/intentos/${id}/`,
     );
   }
 

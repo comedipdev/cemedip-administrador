@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -25,6 +26,7 @@ export class IntentosComponent {
   private fb = inject(NonNullableFormBuilder);
   private evaluacionesService = inject(EvaluacionesService);
   private confirmationService = inject(ConfirmationService);
+  private router = inject(Router);
   private toast = inject(ToastService);
 
   protected readonly filtrosForm = this.fb.group({
@@ -86,6 +88,10 @@ export class IntentosComponent {
     const page = sizeChanged ? 1 : (event.page ?? 0) + 1;
     this.pageSize.set(page_size);
     this.filtros.update((f) => ({ ...f, page, page_size }));
+  }
+
+  verDetalle(id: number) {
+    this.router.navigate(['/evaluaciones/intentos', id]);
   }
 
   confirmarEliminar(id: number) {
