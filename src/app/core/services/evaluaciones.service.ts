@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_BASE_URL } from '@core/constants/api';
 import { ApiSuccessResponse } from '@core/models/api.model';
-import { Examen, ExamenesFiltros, Intento, IntentoDetalleAdmin, IntentosFiltros } from '@core/models/evaluaciones.model';
+import { Examen, ExamenDetalle, ExamenFormInput, ExamenesFiltros, Intento, IntentoDetalleAdmin, IntentosFiltros } from '@core/models/evaluaciones.model';
 
 @Injectable({ providedIn: 'root' })
 export class EvaluacionesService {
@@ -31,8 +31,8 @@ export class EvaluacionesService {
     );
   }
 
-  eliminarIntento(id: number): Observable<ApiSuccessResponse<{}>> {
-    return this.http.delete<ApiSuccessResponse<{}>>(
+  eliminarIntento(id: number): Observable<ApiSuccessResponse<void>> {
+    return this.http.delete<ApiSuccessResponse<void>>(
       `${API_BASE_URL}/admin/evaluaciones/intentos/${id}/`,
     );
   }
@@ -51,8 +51,8 @@ export class EvaluacionesService {
     );
   }
 
-  eliminarExamen(id: number): Observable<ApiSuccessResponse<{}>> {
-    return this.http.delete<ApiSuccessResponse<{}>>(
+  eliminarExamen(id: number): Observable<ApiSuccessResponse<void>> {
+    return this.http.delete<ApiSuccessResponse<void>>(
       `${API_BASE_URL}/admin/evaluaciones/examenes/${id}/`,
     );
   }
@@ -61,6 +61,26 @@ export class EvaluacionesService {
     return this.http.patch<ApiSuccessResponse<{ es_activo: boolean }>>(
       `${API_BASE_URL}/admin/evaluaciones/examenes/${id}/`,
       {},
+    );
+  }
+
+  getExamenDetalle(id: number): Observable<ApiSuccessResponse<ExamenDetalle>> {
+    return this.http.get<ApiSuccessResponse<ExamenDetalle>>(
+      `${API_BASE_URL}/admin/evaluaciones/examenes/${id}/`,
+    );
+  }
+
+  crearExamen(data: ExamenFormInput): Observable<ApiSuccessResponse<ExamenDetalle>> {
+    return this.http.post<ApiSuccessResponse<ExamenDetalle>>(
+      `${API_BASE_URL}/admin/evaluaciones/examenes/`,
+      data,
+    );
+  }
+
+  actualizarExamen(id: number, data: ExamenFormInput): Observable<ApiSuccessResponse<ExamenDetalle>> {
+    return this.http.put<ApiSuccessResponse<ExamenDetalle>>(
+      `${API_BASE_URL}/admin/evaluaciones/examenes/${id}/`,
+      data,
     );
   }
 }

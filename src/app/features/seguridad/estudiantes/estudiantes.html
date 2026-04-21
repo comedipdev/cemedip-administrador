@@ -15,8 +15,9 @@
     <h2 class="mb-3 text-sm font-semibold tracking-wide text-surface-600">CARGA MASIVA POR EXCEL</h2>
     <div class="flex flex-wrap items-end gap-3 justify-between">
       <div class="flex flex-col gap-1">
-        <label class="text-xs font-semibold tracking-wide text-surface-500">ARCHIVO (.xlsx)</label>
+        <label for="est_archivo" class="text-xs font-semibold tracking-wide text-surface-500">ARCHIVO (.xlsx)</label>
         <p-fileupload
+          id="est_archivo"
           mode="basic"
           accept=".xlsx"
           [chooseLabel]="archivoExcel()?.name ?? 'Seleccionar archivo'"
@@ -57,20 +58,21 @@
     <form [formGroup]="filtrosForm" (ngSubmit)="buscar()" class="flex flex-col gap-4">
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">NOMBRES</label>
-          <input pInputText formControlName="nombres" placeholder="Nombre del estudiante" />
+          <label for="est_nombres" class="text-xs font-semibold tracking-wide text-surface-500">NOMBRES</label>
+          <input id="est_nombres" pInputText formControlName="nombres" placeholder="Nombre del estudiante" />
         </div>
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">APELLIDOS</label>
-          <input pInputText formControlName="apellidos" placeholder="Apellido del estudiante" />
+          <label for="est_apellidos" class="text-xs font-semibold tracking-wide text-surface-500">APELLIDOS</label>
+          <input id="est_apellidos" pInputText formControlName="apellidos" placeholder="Apellido del estudiante" />
         </div>
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">CORREO</label>
-          <input pInputText formControlName="correo_institucional" placeholder="Correo del estudiante" />
+          <label for="est_correo" class="text-xs font-semibold tracking-wide text-surface-500">CORREO</label>
+          <input id="est_correo" pInputText formControlName="correo_institucional" placeholder="Correo del estudiante" />
         </div>
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">ESTADO</label>
+          <label for="est_estado" class="text-xs font-semibold tracking-wide text-surface-500">ESTADO</label>
           <p-select
+            id="est_estado"
             formControlName="is_activo"
             [options]="estadoOpciones"
             optionLabel="label"

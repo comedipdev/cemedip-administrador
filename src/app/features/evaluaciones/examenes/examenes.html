@@ -5,6 +5,7 @@
   <!-- Encabezado -->
   <div class="flex items-center justify-between">
     <h1 class="text-2xl font-bold tracking-wide text-surface-700">EXÁMENES</h1>
+    <p-button label="Nuevo examen" icon="pi pi-plus" routerLink="/evaluaciones/examenes/nuevo" />
   </div>
 
   <!-- Filtros -->
@@ -12,12 +13,13 @@
     <form [formGroup]="filtrosForm" (ngSubmit)="buscar()" class="flex flex-col gap-4">
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">NOMBRE</label>
-          <input pInputText formControlName="nombre" placeholder="Nombre del examen" />
+          <label for="ex_nombre" class="text-xs font-semibold tracking-wide text-surface-500">NOMBRE</label>
+          <input id="ex_nombre" pInputText formControlName="nombre" placeholder="Nombre del examen" />
         </div>
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">FECHA INICIAL</label>
+          <label for="ex_fecha_inicio" class="text-xs font-semibold tracking-wide text-surface-500">FECHA INICIAL</label>
           <p-datepicker
+            inputId="ex_fecha_inicio"
             formControlName="fecha_inicio"
             placeholder="Elige una fecha"
             dateFormat="dd/mm/yy"
@@ -26,8 +28,9 @@
           />
         </div>
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">FECHA FINAL</label>
+          <label for="ex_fecha_fin" class="text-xs font-semibold tracking-wide text-surface-500">FECHA FINAL</label>
           <p-datepicker
+            inputId="ex_fecha_fin"
             formControlName="fecha_fin"
             placeholder="Elige una fecha"
             dateFormat="dd/mm/yy"
@@ -132,6 +135,10 @@
               </td>
               <td class="px-3 py-3">
                 <div class="flex items-center justify-center gap-2">
+                  <p-button icon="pi pi-eye" severity="secondary" size="small"
+                    [pt]="{ root: { class: 'w-8 h-8' } }"
+                    [routerLink]="['/evaluaciones/examenes', examen.id_examen, 'configuracion']"
+                  />
                   <p-button icon="pi pi-times" severity="danger" size="small"
                     [pt]="{ root: { class: 'w-8 h-8' } }"
                     (click)="confirmarEliminar(examen.id_examen)"

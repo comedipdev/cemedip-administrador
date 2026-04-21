@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -17,7 +18,7 @@ import { extractApiErrorMessage } from '@core/models/api.model';
 
 @Component({
   selector: 'app-examenes',
-  imports: [DatePipe, FormsModule, ReactiveFormsModule, ButtonModule, ConfirmDialogModule, DatePickerModule, InputTextModule, PaginatorModule, ToggleSwitchModule],
+  imports: [DatePipe, RouterLink, FormsModule, ReactiveFormsModule, ButtonModule, ConfirmDialogModule, DatePickerModule, InputTextModule, PaginatorModule, ToggleSwitchModule],
   providers: [ConfirmationService],
   templateUrl: './examenes.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -12,20 +12,21 @@
     <form [formGroup]="filtrosForm" (ngSubmit)="buscar()" class="flex flex-col gap-4">
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">NOMBRE</label>
-          <input pInputText formControlName="nombres" placeholder="Nombre del estudiante" />
+          <label for="int_nombres" class="text-xs font-semibold tracking-wide text-surface-500">NOMBRE</label>
+          <input id="int_nombres" pInputText formControlName="nombres" placeholder="Nombre del estudiante" />
         </div>
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">APELLIDO</label>
-          <input pInputText formControlName="apellidos" placeholder="Apellido del estudiante" />
+          <label for="int_apellidos" class="text-xs font-semibold tracking-wide text-surface-500">APELLIDO</label>
+          <input id="int_apellidos" pInputText formControlName="apellidos" placeholder="Apellido del estudiante" />
         </div>
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">IDENTIFICACIÓN</label>
-          <input pInputText formControlName="identificacion" placeholder="Número de cédula" />
+          <label for="int_identificacion" class="text-xs font-semibold tracking-wide text-surface-500">IDENTIFICACIÓN</label>
+          <input id="int_identificacion" pInputText formControlName="identificacion" placeholder="Número de cédula" />
         </div>
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">FECHA INICIAL</label>
+          <label for="int_fecha_inicio" class="text-xs font-semibold tracking-wide text-surface-500">FECHA INICIAL</label>
           <p-datepicker
+            inputId="int_fecha_inicio"
             formControlName="fecha_inicio"
             placeholder="Elige una fecha"
             dateFormat="dd/mm/yy"
@@ -35,8 +36,9 @@
 
         </div>
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">FECHA FINAL</label>
+          <label for="int_fecha_fin" class="text-xs font-semibold tracking-wide text-surface-500">FECHA FINAL</label>
           <p-datepicker
+            inputId="int_fecha_fin"
             formControlName="fecha_fin"
             placeholder="Elige una fecha"
             dateFormat="dd/mm/yy"
@@ -142,7 +144,7 @@
                 </span>
               </td>
               <td class="px-3 py-3">{{ intento.puntaje ?? '-' }}</td>
-              <td class="px-3 py-3">{{ intento.porcentaje != null ? intento.porcentaje + '%' : '-' }}</td>
+              <td class="px-3 py-3">{{ intento.porcentaje !== null ? intento.porcentaje + '%' : '-' }}</td>
               <td class="px-3 py-3">{{ intento.preguntas }}</td>
               <td class="px-3 py-3">{{ intento.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</td>
               <td class="px-3 py-3">

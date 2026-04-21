@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { UpperCasePipe } from '@angular/common';
 import { AuthService } from '@core/services/auth.service';
 
 @Component({

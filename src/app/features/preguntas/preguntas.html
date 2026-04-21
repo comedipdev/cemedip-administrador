@@ -11,8 +11,9 @@
     <h2 class="mb-3 text-sm font-semibold tracking-wide text-surface-600">CARGA MASIVA POR EXCEL</h2>
     <div class="flex flex-wrap items-end justify-between gap-3">
       <div class="flex flex-col gap-1">
-        <label class="text-xs font-semibold tracking-wide text-surface-500">ARCHIVO (.xlsx)</label>
+        <label for="pq_archivo" class="text-xs font-semibold tracking-wide text-surface-500">ARCHIVO (.xlsx)</label>
         <p-fileupload
+          id="pq_archivo"
           mode="basic"
           accept=".xlsx"
           [chooseLabel]="archivoExcel()?.name ?? 'Seleccionar archivo'"

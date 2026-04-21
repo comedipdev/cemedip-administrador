@@ -1,0 +1,225 @@
+@if (isLoading()) {
+  <div class="flex items-center justify-center py-16">
+    <i class="pi pi-spinner pi-spin text-3xl text-primary"></i>
+  </div>
+} @else {
+  <form [formGroup]="form" (ngSubmit)="guardar()" class="flex flex-col gap-6">
+
+    <!-- Fila 1: Nombre -->
+    <div class="flex flex-col gap-1">
+      <label for="cfg_nombre" class="text-xs font-semibold tracking-wide text-surface-500">NOMBRE</label>
+      <input
+        id="cfg_nombre"
+        pInputText
+        formControlName="nombre"
+        placeholder="Nombre del examen"
+        [class.border-red-400]="formSubmitted() && form.get('nombre')?.invalid"
+      />
+      @if (formSubmitted() && form.get('nombre')?.invalid) {
+        <span class="text-xs text-red-500">Campo requerido.</span>
+      }
+    </div>
+
+    <!-- Fila 2: Descripción -->
+    <div class="flex flex-col gap-1">
+      <label for="cfg_descripcion" class="text-xs font-semibold tracking-wide text-surface-500">DESCRIPCIÓN</label>
+      <textarea id="cfg_descripcion" pTextarea formControlName="descripcion" placeholder="Descripción del examen" rows="2"></textarea>
+    </div>
+
+    <!-- Fila 3: Especialidades + Tipos -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div class="flex flex-col gap-1">
+        <label for="cfg_especialidades" class="text-xs font-semibold tracking-wide text-surface-500">ESPECIALIDADES</label>
+        <p-multiselect
+          inputId="cfg_especialidades"
+          formControlName="especialidades_ids"
+          [options]="especialidadOpciones()"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Selecciona especialidades"
+          display="chip"
+          styleClass="w-full"
+          (onChange)="onEspecialidadChange($event.value)"
+        />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="cfg_tipos" class="text-xs font-semibold tracking-wide text-surface-500">TIPOS</label>
+        <p-multiselect
+          inputId="cfg_tipos"
+          formControlName="tipos_ids"
+          [options]="tipoOpciones()"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Selecciona tipos"
+          display="chip"
+          styleClass="w-full"
+          [disabled]="!selectedEspecialidades().length"
+          (onChange)="onTipoChange($event.value)"
+        />
+      </div>
+    </div>
+
+    <!-- Fila 4: Temas -->
+    <div class="flex flex-col gap-1">
+      <label for="cfg_temas" class="text-xs font-semibold tracking-wide text-surface-500">TEMAS</label>
+      <p-multiselect
+        inputId="cfg_temas"
+        formControlName="temas_ids"
+        [options]="temaOpciones()"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Selecciona temas"
+        display="chip"
+        styleClass="w-full"
+        [disabled]="!selectedEspecialidades().length || !selectedTipos().length"
+      />
+    </div>
+
+    <!-- Fila 5: Estado examen (readonly) + Estado activo -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div class="flex flex-col gap-1">
+        <span class="text-xs font-semibold tracking-wide text-surface-500">ESTADO DEL EXAMEN</span>
+        @if (estadoExamenLabel()) {
+          <div class="flex items-center h-14">
+            <span
+              class="inline-block rounded px-3 py-1 text-sm font-semibold text-white"
+              [class]="{
+                'bg-blue-500': estadoExamen() === 'proximo',
+                'bg-teal-500': estadoExamen() === 'en_prgoreso',
+                'bg-surface-400': estadoExamen() === 'finalizado'
+              }"
+            >
+              {{ estadoExamenLabel() }}
+            </span>
+          </div>
+        } @else {
+          <div class="flex items-center h-14 text-sm text-surface-400">Se calculará con las fechas.</div>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="cfg_es_activo" class="text-xs font-semibold tracking-wide text-surface-500">ESTADO</label>
+        <p-select
+          inputId="cfg_es_activo"
+          formControlName="es_activo"
+          [options]="estadoOptions"
+          optionLabel="label"
+          optionValue="value"
+          styleClass="w-full"
+        />
+      </div>
+    </div>
+
+    <!-- Fila 6: Fechas + Intentos -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="flex flex-col gap-1">
+        <label for="cfg_fecha_inicio" class="text-xs font-semibold tracking-wide text-surface-500">FECHA INICIAL</label>
+        <p-datepicker
+          inputId="cfg_fecha_inicio"
+          formControlName="fecha_inicio"
+          placeholder="Elige una fecha"
+          dateFormat="dd/mm/yy"
+          [showTime]="true"
+          [showIcon]="true"
+          styleClass="w-full"
+          [class.border-red-400]="formSubmitted() && form.get('fecha_inicio')?.invalid"
+        />
+        @if (formSubmitted() && form.get('fecha_inicio')?.invalid) {
+          <span class="text-xs text-red-500">Campo requerido.</span>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="cfg_fecha_entrega" class="text-xs font-semibold tracking-wide text-surface-500">FECHA FINAL</label>
+        <p-datepicker
+          inputId="cfg_fecha_entrega"
+          formControlName="fecha_entrega"
+          placeholder="Elige una fecha"
+          dateFormat="dd/mm/yy"
+          [showTime]="true"
+          [showIcon]="true"
+          styleClass="w-full"
+          [class.border-red-400]="formSubmitted() && form.get('fecha_entrega')?.invalid"
+        />
+        @if (formSubmitted() && form.get('fecha_entrega')?.invalid) {
+          <span class="text-xs text-red-500">Campo requerido.</span>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="cfg_numero_intentos" class="text-xs font-semibold tracking-wide text-surface-500">NÚMERO DE INTENTOS</label>
+        <p-select
+          inputId="cfg_numero_intentos"
+          formControlName="numero_intentos"
+          [options]="intentosOptions"
+          optionLabel="label"
+          optionValue="value"
+          styleClass="w-full"
+        />
+      </div>
+    </div>
+
+    <!-- Fila 7: Duración + Preguntas + Puntaje -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="flex flex-col gap-1">
+        <label for="cfg_duracion" class="text-xs font-semibold tracking-wide text-surface-500">DURACIÓN (minutos)</label>
+        <p-inputnumber
+          inputId="cfg_duracion"
+          formControlName="duracion_minutos"
+          placeholder="Ej. 90"
+          [min]="1"
+          styleClass="w-full"
+          [class.border-red-400]="formSubmitted() && form.get('duracion_minutos')?.invalid"
+        />
+        @if (formSubmitted() && form.get('duracion_minutos')?.invalid) {
+          <span class="text-xs text-red-500">Campo requerido.</span>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="cfg_numero_preguntas" class="text-xs font-semibold tracking-wide text-surface-500">NÚMERO DE PREGUNTAS</label>
+        <p-inputnumber
+          inputId="cfg_numero_preguntas"
+          formControlName="numero_preguntas"
+          placeholder="Ej. 40"
+          [min]="1"
+          styleClass="w-full"
+          [class.border-red-400]="formSubmitted() && form.get('numero_preguntas')?.invalid"
+        />
+        @if (formSubmitted() && form.get('numero_preguntas')?.invalid) {
+          <span class="text-xs text-red-500">Campo requerido.</span>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="cfg_puntaje" class="text-xs font-semibold tracking-wide text-surface-500">PUNTAJE MÁXIMO</label>
+        <p-inputnumber
+          inputId="cfg_puntaje"
+          formControlName="puntaje_maximo"
+          placeholder="Ej. 100"
+          [min]="0"
+          [minFractionDigits]="0"
+          [maxFractionDigits]="2"
+          styleClass="w-full"
+          [class.border-red-400]="formSubmitted() && form.get('puntaje_maximo')?.invalid"
+        />
+        @if (formSubmitted() && form.get('puntaje_maximo')?.invalid) {
+          <span class="text-xs text-red-500">Campo requerido.</span>
+        }
+      </div>
+    </div>
+
+    <!-- Error -->
+    @if (errorMessage()) {
+      <div class="app-feedback-message app-feedback-message-danger">
+        <p class="text-sm">{{ errorMessage() }}</p>
+      </div>
+    }
+
+    <!-- Guardar -->
+    <div class="flex justify-center pt-2">
+      <p-button
+        type="submit"
+        label="GUARDAR"
+        [loading]="isSaving()"
+        styleClass="px-16"
+      />
+    </div>
+
+  </form>
+}

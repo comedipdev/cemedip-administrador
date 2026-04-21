@@ -45,15 +45,15 @@ export class SeguridadService {
     );
   }
 
-  activarEstudiante(id: number): Observable<ApiSuccessResponse<{}>> {
-    return this.http.post<ApiSuccessResponse<{}>>(
+  activarEstudiante(id: number): Observable<ApiSuccessResponse<void>> {
+    return this.http.post<ApiSuccessResponse<void>>(
       `${API_BASE_URL}/admin/seguridad/estudiantes/${id}/activar/`,
       {},
     );
   }
 
-  inactivarEstudiante(id: number): Observable<ApiSuccessResponse<{}>> {
-    return this.http.post<ApiSuccessResponse<{}>>(
+  inactivarEstudiante(id: number): Observable<ApiSuccessResponse<void>> {
+    return this.http.post<ApiSuccessResponse<void>>(
       `${API_BASE_URL}/admin/seguridad/estudiantes/${id}/inactivar/`,
       {},
     );

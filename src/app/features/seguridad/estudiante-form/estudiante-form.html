@@ -28,8 +28,9 @@
 
         <!-- Tipo de identificación -->
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">TIPO DE IDENTIFICACIÓN</label>
+          <label for="sf_tipo_identificacion" class="text-xs font-semibold tracking-wide text-surface-500">TIPO DE IDENTIFICACIÓN</label>
           <p-select
+            id="sf_tipo_identificacion"
             formControlName="tipo_identificacion"
             [options]="tipoIdentificacionOpciones"
             optionLabel="label"
@@ -40,26 +41,27 @@
 
         <!-- Identificación -->
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">IDENTIFICACIÓN</label>
-          <input pInputText formControlName="identificacion" placeholder="Número de cédula o pasaporte" />
+          <label for="sf_identificacion" class="text-xs font-semibold tracking-wide text-surface-500">IDENTIFICACIÓN</label>
+          <input id="sf_identificacion" pInputText formControlName="identificacion" placeholder="Número de cédula o pasaporte" />
         </div>
 
         <!-- Nombres -->
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">NOMBRES</label>
-          <input pInputText formControlName="nombres" placeholder="Nombres del estudiante" />
+          <label for="sf_nombres" class="text-xs font-semibold tracking-wide text-surface-500">NOMBRES</label>
+          <input id="sf_nombres" pInputText formControlName="nombres" placeholder="Nombres del estudiante" />
         </div>
 
         <!-- Apellidos -->
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">APELLIDOS</label>
-          <input pInputText formControlName="apellidos" placeholder="Apellidos del estudiante" />
+          <label for="sf_apellidos" class="text-xs font-semibold tracking-wide text-surface-500">APELLIDOS</label>
+          <input id="sf_apellidos" pInputText formControlName="apellidos" placeholder="Apellidos del estudiante" />
         </div>
 
         <!-- Fecha de nacimiento -->
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">FECHA DE NACIMIENTO</label>
+          <label for="sf_fecha_nacimiento" class="text-xs font-semibold tracking-wide text-surface-500">FECHA DE NACIMIENTO</label>
           <p-datepicker
+            id="sf_fecha_nacimiento"
             formControlName="fecha_nacimiento"
             dateFormat="dd/mm/yy"
             [showIcon]="true"
@@ -70,8 +72,9 @@
 
         <!-- Género -->
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">GÉNERO</label>
+          <label for="sf_genero" class="text-xs font-semibold tracking-wide text-surface-500">GÉNERO</label>
           <p-select
+            id="sf_genero"
             formControlName="genero"
             [options]="generoOpciones"
             optionLabel="label"
@@ -83,7 +86,7 @@
 
         <!-- Correo institucional -->
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">
+          <label for="sf_correo_institucional" class="text-xs font-semibold tracking-wide text-surface-500">
             CORREO INSTITUCIONAL
             @if (!esNuevo()) {
               <span class="ml-1 font-normal text-surface-400">
@@ -94,6 +97,7 @@
 
           @if (esNuevo()) {
             <input
+              id="sf_correo_institucional"
               pInputText
               formControlName="correo_institucional"
               placeholder="correo@cemedip.ec"
@@ -119,10 +123,11 @@
 
         <!-- Correo personal -->
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">
+          <label for="sf_correo_personal" class="text-xs font-semibold tracking-wide text-surface-500">
             CORREO PERSONAL <span class="font-normal text-surface-400">(Opcional)</span>
           </label>
           <input
+            id="sf_correo_personal"
             pInputText
             formControlName="correo_personal"
             placeholder="correo@personal.com"
@@ -136,26 +141,27 @@
 
         <!-- Teléfono convencional -->
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">
+          <label for="sf_telefono_convencional" class="text-xs font-semibold tracking-wide text-surface-500">
             TELÉFONO CONVENCIONAL <span class="font-normal text-surface-400">(Opcional)</span>
           </label>
-          <input pInputText formControlName="telefono_convencional" placeholder="02 000 0000" />
+          <input id="sf_telefono_convencional" pInputText formControlName="telefono_convencional" placeholder="02 000 0000" />
         </div>
 
         <!-- Celular -->
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">
+          <label for="sf_telefono_celular" class="text-xs font-semibold tracking-wide text-surface-500">
             CELULAR <span class="font-normal text-surface-400">(Opcional)</span>
           </label>
-          <input pInputText formControlName="telefono_celular" placeholder="09X XXX XXXX" />
+          <input id="sf_telefono_celular" pInputText formControlName="telefono_celular" placeholder="09X XXX XXXX" />
         </div>
 
         <!-- Dirección -->
         <div class="flex flex-col gap-1 sm:col-span-2">
-          <label class="text-xs font-semibold tracking-wide text-surface-500">
+          <label for="sf_direccion" class="text-xs font-semibold tracking-wide text-surface-500">
             DIRECCIÓN <span class="font-normal text-surface-400">(Opcional)</span>
           </label>
           <textarea
+            id="sf_direccion"
             pTextarea
             formControlName="direccion"
             rows="3"
@@ -167,13 +173,13 @@
         <!-- Usuario + Estado — solo en edición -->
         @if (!esNuevo()) {
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-semibold tracking-wide text-surface-500">USUARIO</label>
-            <input pInputText formControlName="username" placeholder="nombre.usuario" />
+            <label for="sf_username" class="text-xs font-semibold tracking-wide text-surface-500">USUARIO</label>
+            <input id="sf_username" pInputText formControlName="username" placeholder="nombre.usuario" />
             <p class="ml-1 text-[10px] text-surface-400">Nombre con el que el estudiante inicia sesión.</p>
           </div>
 
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-semibold tracking-wide text-surface-500">ESTADO DE LA CUENTA</label>
+            <span class="text-xs font-semibold tracking-wide text-surface-500">ESTADO DE LA CUENTA</span>
             <div class="flex h-14 items-center gap-3 rounded-xl border border-surface-200 bg-surface-50 px-5">
               <span
                 class="inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold"

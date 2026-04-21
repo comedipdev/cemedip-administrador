@@ -12,7 +12,11 @@ import { TopBarComponent } from '@shared/components/top-bar/top-bar';
       @if (sidebarOpen()) {
         <div
           class="fixed inset-0 z-40 bg-black/40 lg:hidden"
+          role="button"
+          tabindex="0"
           (click)="sidebarOpen.set(false)"
+          (keydown.enter)="sidebarOpen.set(false)"
+          (keydown.space)="sidebarOpen.set(false)"
         ></div>
       }
 

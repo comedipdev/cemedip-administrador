@@ -82,6 +82,37 @@ export interface Examen {
   es_activo: boolean;
 }
 
+export interface ExamenDetalle {
+  id_examen: number;
+  nombre: string;
+  descripcion: string | null;
+  usuario_creacion: string | null;
+  fecha_inicio: string;
+  fecha_entrega: string;
+  numero_intentos: number;
+  duracion_minutos: number;
+  numero_preguntas: number;
+  puntaje_maximo: string;
+  es_activo: boolean;
+  configuracion: { especialidades_ids?: number[]; tipos_ids?: number[]; temas_ids?: number[] } | null;
+  fecha_creacion: string;
+  estado_examen: string;
+}
+
+export interface ExamenFormInput {
+  nombre: string;
+  descripcion?: string | null;
+  usuario_creacion?: string | null;
+  fecha_inicio: string;
+  fecha_entrega: string;
+  numero_intentos: number;
+  duracion_minutos: number;
+  numero_preguntas: number;
+  puntaje_maximo: number;
+  es_activo: boolean;
+  configuracion?: { especialidades_ids: number[]; tipos_ids: number[]; temas_ids: number[] } | null;
+}
+
 export interface ExamenesFiltros {
   page?: number;
   page_size?: number;

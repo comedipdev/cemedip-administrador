@@ -68,6 +68,47 @@ export const routes: Routes = [
           import('@features/evaluaciones/examenes/examenes').then((m) => m.ExamenesComponent),
       },
       {
+        path: 'evaluaciones/examenes/nuevo',
+        loadComponent: () =>
+          import('@features/evaluaciones/examen-form/examen-form').then((m) => m.ExamenFormComponent),
+        children: [
+          {
+            path: 'configuracion',
+            loadComponent: () =>
+              import('@features/evaluaciones/examen-form/configuracion/configuracion').then((m) => m.ExamenConfiguracionComponent),
+          },
+          { path: '', redirectTo: 'configuracion', pathMatch: 'full' },
+        ],
+      },
+      {
+        path: 'evaluaciones/examenes/:id',
+        loadComponent: () =>
+          import('@features/evaluaciones/examen-form/examen-form').then((m) => m.ExamenFormComponent),
+        children: [
+          {
+            path: 'configuracion',
+            loadComponent: () =>
+              import('@features/evaluaciones/examen-form/configuracion/configuracion').then((m) => m.ExamenConfiguracionComponent),
+          },
+          {
+            path: 'cuestionario',
+            loadComponent: () =>
+              import('@features/evaluaciones/examen-form/cuestionario/cuestionario').then((m) => m.ExamenCuestionarioComponent),
+          },
+          {
+            path: 'preguntas',
+            loadComponent: () =>
+              import('@features/evaluaciones/examen-form/preguntas/preguntas').then((m) => m.ExamenPreguntasComponent),
+          },
+          {
+            path: 'resultados',
+            loadComponent: () =>
+              import('@features/evaluaciones/examen-form/resultados/resultados').then((m) => m.ExamenResultadosComponent),
+          },
+          { path: '', redirectTo: 'configuracion', pathMatch: 'full' },
+        ],
+      },
+      {
         path: '',
         redirectTo: 'home',
         pathMatch: 'full',

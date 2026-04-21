@@ -17,31 +17,31 @@
     <!-- Info del estudiante -->
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div class="flex flex-col gap-1">
-        <label class="text-xs font-semibold tracking-wide text-surface-500">TIPO DE IDENTIFICACIÓN</label>
+        <span class="text-xs font-semibold tracking-wide text-surface-500">TIPO DE IDENTIFICACIÓN</span>
         <div class="flex h-14 items-center rounded-xl border border-surface-200 bg-surface-100 px-5">
           <span class="text-sm text-surface-500">{{ data.estudiante.tipo_identificacion ?? '-' }}</span>
         </div>
       </div>
       <div class="flex flex-col gap-1">
-        <label class="text-xs font-semibold tracking-wide text-surface-500">IDENTIFICACIÓN</label>
+        <span class="text-xs font-semibold tracking-wide text-surface-500">IDENTIFICACIÓN</span>
         <div class="flex h-14 items-center rounded-xl border border-surface-200 bg-surface-100 px-5">
           <span class="text-sm text-surface-500">{{ data.estudiante.identificacion ?? '-' }}</span>
         </div>
       </div>
       <div class="flex flex-col gap-1">
-        <label class="text-xs font-semibold tracking-wide text-surface-500">NOMBRE</label>
+        <span class="text-xs font-semibold tracking-wide text-surface-500">NOMBRE</span>
         <div class="flex h-14 items-center rounded-xl border border-surface-200 bg-surface-100 px-5">
           <span class="text-sm text-surface-500">{{ data.estudiante.nombres ?? '-' }}</span>
         </div>
       </div>
       <div class="flex flex-col gap-1">
-        <label class="text-xs font-semibold tracking-wide text-surface-500">APELLIDO</label>
+        <span class="text-xs font-semibold tracking-wide text-surface-500">APELLIDO</span>
         <div class="flex h-14 items-center rounded-xl border border-surface-200 bg-surface-100 px-5">
           <span class="text-sm text-surface-500">{{ data.estudiante.apellidos ?? '-' }}</span>
         </div>
       </div>
       <div class="flex flex-col gap-1">
-        <label class="text-xs font-semibold tracking-wide text-surface-500">FECHA DE NACIMIENTO</label>
+        <span class="text-xs font-semibold tracking-wide text-surface-500">FECHA DE NACIMIENTO</span>
         <div class="flex h-14 items-center rounded-xl border border-surface-200 bg-surface-100 px-5">
           <span class="text-sm text-surface-500">
             {{ data.estudiante.fecha_nacimiento ? (data.estudiante.fecha_nacimiento | date:'dd/MM/yyyy') : '-' }}
@@ -49,7 +49,7 @@
         </div>
       </div>
       <div class="flex flex-col gap-1">
-        <label class="text-xs font-semibold tracking-wide text-surface-500">USUARIO</label>
+        <span class="text-xs font-semibold tracking-wide text-surface-500">USUARIO</span>
         <div class="flex h-14 items-center rounded-xl border border-surface-200 bg-surface-100 px-5">
           <span class="text-sm text-surface-500">{{ data.estudiante.username }}</span>
         </div>
