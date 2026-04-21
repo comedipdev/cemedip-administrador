@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -57,9 +57,9 @@ export class EstudiantesComponent {
   protected readonly pageSize = signal(10);
   protected readonly paginaActual = computed(() => ((this.paginador()?.pagina_actual ?? 1) - 1) * this.pageSize());
 
-  protected readonly errorMessage = computed(() => {
+  private readonly _ = effect(() => {
     const error = this.estudiantesResource.error() as HttpErrorResponse | null;
-    return error ? extractApiErrorMessage(error) : null;
+    if (error) this.toast.error(extractApiErrorMessage(error));
   });
 
   buscar() {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -49,9 +49,9 @@ export class ExamenesComponent {
   protected readonly pageSize = signal(10);
   protected readonly paginaActual = computed(() => ((this.paginador()?.pagina_actual ?? 1) - 1) * this.pageSize());
 
-  protected readonly errorMessage = computed(() => {
+  private readonly _ = effect(() => {
     const error = this.examenesResource.error() as HttpErrorResponse | null;
-    return error ? extractApiErrorMessage(error) : null;
+    if (error) this.toast.error(extractApiErrorMessage(error));
   });
 
   private toIsoDate(date: Date | null): string | undefined {

@@ -123,8 +123,6 @@ export class PreguntaFormComponent implements OnInit {
     return { letra, contenido };
   });
 
-  protected readonly errorMessage = signal<string | null>(null);
-
   // Form
   protected readonly form = this.fb.group({
     enunciado: ['', [Validators.required]],
@@ -215,7 +213,6 @@ export class PreguntaFormComponent implements OnInit {
 
   guardar() {
     this.formSubmitted.set(true);
-    this.errorMessage.set(null);
     this.form.markAllAsTouched();
 
     if (this.form.invalid || this.isSaving()) return;
@@ -223,7 +220,7 @@ export class PreguntaFormComponent implements OnInit {
     const alts = this.alternativasArray.controls;
     const correctas = alts.filter((c) => c.get('es_correcta')?.value);
     if (correctas.length !== 1) {
-      this.errorMessage.set('Debe marcar exactamente una alternativa como correcta.');
+      this.toast.error('Debe marcar exactamente una alternativa como correcta.');
       return;
     }
 
@@ -262,7 +259,7 @@ export class PreguntaFormComponent implements OnInit {
         }
       },
       error: (err: HttpErrorResponse) => {
-        this.errorMessage.set(extractApiErrorMessage(err));
+        this.toast.error(extractApiErrorMessage(err));
         this.isSaving.set(false);
       },
     });

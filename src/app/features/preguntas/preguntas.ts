@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -119,9 +119,9 @@ export class PreguntasComponent {
     () => this.temasResource.value() ?? [],
   );
 
-  protected readonly errorMessage = computed(() => {
+  private readonly _ = effect(() => {
     const error = this.preguntasResource.error() as HttpErrorResponse | null;
-    return error ? extractApiErrorMessage(error) : null;
+    if (error) this.toast.error(extractApiErrorMessage(error));
   });
 
   buscar() {

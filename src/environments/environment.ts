@@ -1,3 +1,3 @@
 export const environment = {
-  apiBaseUrl: 'https://comedip.pythonanywhere.com',
+  apiBaseUrl: 'https://api.cemedip.net',
 };

@@ -52,7 +52,6 @@ export class ExamenConfiguracionComponent implements OnInit {
   protected readonly isSaving = signal(false);
   protected readonly isLoading = signal(false);
   protected readonly formSubmitted = signal(false);
-  protected readonly errorMessage = signal<string | null>(null);
   protected readonly estadoExamen = signal<string | null>(null);
 
   protected readonly idExamen = signal<number | null>(null);
@@ -180,7 +179,6 @@ export class ExamenConfiguracionComponent implements OnInit {
 
   guardar() {
     this.formSubmitted.set(true);
-    this.errorMessage.set(null);
     this.form.markAllAsTouched();
     if (this.form.invalid || this.isSaving()) return;
 
@@ -220,7 +218,7 @@ export class ExamenConfiguracionComponent implements OnInit {
         }
       },
       error: (err: HttpErrorResponse) => {
-        this.errorMessage.set(extractApiErrorMessage(err));
+        this.toast.error(extractApiErrorMessage(err));
         this.isSaving.set(false);
       },
     });
