@@ -1,0 +1,91 @@
+@if (isLoading()) {
+  <div class="flex items-center justify-center py-16">
+    <i class="pi pi-spinner pi-spin text-3xl text-primary"></i>
+  </div>
+} @else if (resultados().length === 0) {
+  <div class="flex flex-col items-center py-16 text-surface-400 gap-2">
+    <i class="pi pi-chart-bar text-3xl"></i>
+    <span class="text-sm">No hay intentos registrados para este examen.</span>
+  </div>
+} @else {
+  <div class="flex flex-col gap-4">
+
+    <!-- Resumen -->
+    <div class="flex items-center gap-3 flex-wrap">
+      <span class="text-sm text-surface-500">
+        Total de intentos: <strong>{{ resultados().length }}</strong>
+      </span>
+      <span class="text-sm text-surface-500">
+        Estudiantes con resultado final: <strong>{{ totalResultadosFinales() }}</strong>
+      </span>
+    </div>
+
+    <!-- Tabla -->
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-separate border-spacing-y-1 min-w-[900px]">
+        <thead>
+          <tr class="bg-primary text-white font-semibold tracking-wide text-left">
+            <th class="px-3 py-2">ESTUDIANTE</th>
+            <th class="px-3 py-2 w-36">IDENTIFICACIÓN</th>
+            <th class="px-3 py-2 w-28 text-center">ESTADO</th>
+            <th class="px-3 py-2 w-36">FINALIZACIÓN</th>
+            <th class="px-3 py-2 w-24 text-center">CORRECTAS</th>
+            <th class="px-3 py-2 w-20 text-center">%</th>
+            <th class="px-3 py-2 w-24 text-center">PUNTAJE</th>
+            <th class="px-3 py-2 w-24 text-center">DURACIÓN</th>
+            <th class="px-3 py-2 w-32 text-center">RESULTADO</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of resultados(); track r.id_intento) {
+            <tr
+              class="transition-colors text-left"
+              [class]="r.es_ultimo_intento
+                ? 'bg-green-500/10 hover:bg-green-500/20'
+                : 'bg-surface-200 hover:bg-surface-300'"
+            >
+              <td class="px-3 py-2 font-medium">
+                {{ r.apellidos ?? '-' }}, {{ r.nombres ?? '-' }}
+              </td>
+              <td class="px-3 py-2 text-xs text-surface-500 font-mono">
+                {{ r.identificacion ?? '-' }}
+              </td>
+              <td class="px-3 py-2 text-center">
+                <span
+                  class="inline-block rounded px-2 py-0.5 text-xs font-semibold text-white"
+                  [class]="estadoClass(r.estado_intento)"
+                >
+                  {{ estadoLabel(r.estado_intento) }}
+                </span>
+              </td>
+              <td class="px-3 py-2 text-xs text-surface-500">
+                {{ r.fecha_finalizacion ? (r.fecha_finalizacion | date:'dd/MM/yy HH:mm') : '-' }}
+              </td>
+              <td class="px-3 py-2 text-xs text-center font-mono">
+                {{ r.correctas }}/{{ r.total_preguntas }}
+              </td>
+              <td class="px-3 py-2 text-xs text-center font-mono">
+                {{ r.porcentaje != null ? r.porcentaje + '%' : '-' }}
+              </td>
+              <td class="px-3 py-2 text-xs text-center font-mono">
+                {{ r.puntaje_obtenido ?? '-' }}
+              </td>
+              <td class="px-3 py-2 text-xs text-center text-surface-500">
+                {{ r.duracion_display ?? '-' }}
+              </td>
+              <td class="px-3 py-2 text-center">
+                @if (r.es_ultimo_intento) {
+                  <span class="inline-flex items-center gap-1 rounded-full bg-green-500 text-white px-2 py-0.5 text-[11px] font-semibold">
+                    <i class="pi pi-check text-[10px]"></i>
+                    Resultado final
+                  </span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+}

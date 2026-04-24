@@ -127,3 +127,19 @@ export interface ExamenesFiltros {
   fecha_inicio?: string;
   fecha_fin?: string;
 }
+
+export interface ExamenResultadoIntento {
+  id_intento: number;
+  nombres: string | null;
+  apellidos: string | null;
+  identificacion: string | null;
+  es_ultimo_intento: boolean;
+  estado_intento: 'en_progreso' | 'finalizado' | 'vencido';
+  fecha_creacion: string;
+  fecha_finalizacion: string | null;
+  correctas: number;
+  total_preguntas: number;
+  porcentaje: string | null;
+  puntaje_obtenido: string | null;
+  duracion_display: string | null;
+}

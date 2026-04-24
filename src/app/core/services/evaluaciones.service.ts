@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_BASE_URL } from '@core/constants/api';
 import { ApiSuccessResponse } from '@core/models/api.model';
-import { Examen, ExamenDetalle, ExamenFormInput, ExamenesFiltros, Intento, IntentoDetalleAdmin, IntentosFiltros } from '@core/models/evaluaciones.model';
+import { Examen, ExamenDetalle, ExamenFormInput, ExamenesFiltros, ExamenResultadoIntento, Intento, IntentoDetalleAdmin, IntentosFiltros } from '@core/models/evaluaciones.model';
 
 @Injectable({ providedIn: 'root' })
 export class EvaluacionesService {
@@ -100,6 +100,12 @@ export class EvaluacionesService {
   ): Observable<ApiSuccessResponse<ExamenDetalle>> {
     return this.http.delete<ApiSuccessResponse<ExamenDetalle>>(
       `${API_BASE_URL}/admin/evaluaciones/examenes/${idExamen}/preguntas/${idExamenPregunta}/`,
+    );
+  }
+
+  getResultadosExamen(idExamen: number): Observable<ApiSuccessResponse<ExamenResultadoIntento[]>> {
+    return this.http.get<ApiSuccessResponse<ExamenResultadoIntento[]>>(
+      `${API_BASE_URL}/admin/evaluaciones/examenes/${idExamen}/resultados/`,
     );
   }
 }
