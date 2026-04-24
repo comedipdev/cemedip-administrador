@@ -96,11 +96,6 @@ export const routes: Routes = [
               import('@features/evaluaciones/examen-form/cuestionario/cuestionario').then((m) => m.ExamenCuestionarioComponent),
           },
           {
-            path: 'preguntas',
-            loadComponent: () =>
-              import('@features/evaluaciones/examen-form/preguntas/preguntas').then((m) => m.ExamenPreguntasComponent),
-          },
-          {
             path: 'resultados',
             loadComponent: () =>
               import('@features/evaluaciones/examen-form/resultados/resultados').then((m) => m.ExamenResultadosComponent),

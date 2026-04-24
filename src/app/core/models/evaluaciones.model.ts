@@ -128,6 +128,11 @@ export interface ExamenesFiltros {
   fecha_fin?: string;
 }
 
+export interface ExamenResultadoPregunta {
+  orden: number;
+  pregunta_id: number;
+}
+
 export interface ExamenResultadoIntento {
   id_intento: number;
   nombres: string | null;
@@ -142,4 +147,10 @@ export interface ExamenResultadoIntento {
   porcentaje: string | null;
   puntaje_obtenido: string | null;
   duracion_display: string | null;
+  respuestas: Record<string, 'correcta' | 'incorrecta' | 'sin_responder'>;
+}
+
+export interface ExamenResultadosData {
+  preguntas: ExamenResultadoPregunta[];
+  intentos: ExamenResultadoIntento[];
 }
