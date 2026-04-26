@@ -188,8 +188,9 @@
         <span class="text-xs font-semibold tracking-wide text-surface-500">AGREGAR PREGUNTAS POR ESPECIALIDAD</span>
         <div [formGroup]="agregarForm" class="flex items-end gap-3 flex-wrap sm:flex-nowrap">
           <div class="flex flex-col gap-1 flex-1 min-w-48">
-            <label class="text-xs font-semibold tracking-wide text-surface-500">ESPECIALIDAD</label>
+            <label for="agregar-especialidad" class="text-xs font-semibold tracking-wide text-surface-500">ESPECIALIDAD</label>
             <p-select
+              inputId="agregar-especialidad"
               formControlName="especialidad_id"
               [options]="especialidadOpciones()"
               optionLabel="label"
@@ -199,8 +200,9 @@
             />
           </div>
           <div class="flex flex-col gap-1 w-36">
-            <label class="text-xs font-semibold tracking-wide text-surface-500">CANTIDAD</label>
+            <label for="agregar-cantidad" class="text-xs font-semibold tracking-wide text-surface-500">CANTIDAD</label>
             <p-inputnumber
+              inputId="agregar-cantidad"
               formControlName="cantidad"
               placeholder="Ej. 20"
               [min]="1"

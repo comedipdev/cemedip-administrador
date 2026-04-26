@@ -34,6 +34,25 @@ export const routes: Routes = [
         loadComponent: () => import('@features/home/home').then((m) => m.HomeComponent),
       },
       {
+        path: 'seguridad/administradores',
+        loadComponent: () =>
+          import('@features/seguridad/administradores/administradores').then((m) => m.AdministradoresComponent),
+      },
+      {
+        path: 'seguridad/administradores/nuevo',
+        loadComponent: () =>
+          import('@features/seguridad/administrador-form/administrador-form').then(
+            (m) => m.AdministradorFormComponent,
+          ),
+      },
+      {
+        path: 'seguridad/administradores/:id',
+        loadComponent: () =>
+          import('@features/seguridad/administrador-form/administrador-form').then(
+            (m) => m.AdministradorFormComponent,
+          ),
+      },
+      {
         path: 'seguridad/estudiantes',
         loadComponent: () =>
           import('@features/seguridad/estudiantes/estudiantes').then((m) => m.EstudiantesComponent),

@@ -1,0 +1,119 @@
+<p-confirm-dialog />
+
+<div class="flex flex-col gap-6">
+
+  <!-- Encabezado -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold tracking-wide text-surface-700">
+      ADMINISTRADORES
+    </h1>
+    <p-button label="AGREGAR" icon="pi pi-plus-circle" severity="secondary" routerLink="/seguridad/administradores/nuevo"/>
+  </div>
+
+  <!-- Filtros -->
+  <div>
+    <form [formGroup]="filtrosForm" (ngSubmit)="buscar()" class="flex flex-col gap-4">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="flex flex-col gap-1">
+          <label for="adm_nombre" class="text-xs font-semibold tracking-wide text-surface-500">NOMBRE</label>
+          <input id="adm_nombre" pInputText formControlName="nombre" placeholder="Nombre del administrador" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label for="adm_estado" class="text-xs font-semibold tracking-wide text-surface-500">ESTADO</label>
+          <p-select
+            id="adm_estado"
+            formControlName="is_activo"
+            [options]="estadoOpciones"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Estado"
+            styleClass="app-select-field"
+          />
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <p-button type="submit" label="Buscar" [loading]="isLoading()" />
+        <p-button type="button" icon="pi pi-trash" severity="primary" (click)="limpiar()" [disabled]="isLoading()" />
+      </div>
+    </form>
+  </div>
+
+  <!-- Tabla -->
+  <div>
+    <table class="w-full text-sm border-separate border-spacing-y-1.5 text-center">
+      <thead>
+        <tr class="bg-primary text-white font-semibold tracking-wide">
+          <th class="px-4 py-3">ID</th>
+          <th class="px-4 py-3">NOMBRE</th>
+          <th class="px-4 py-3">USUARIO</th>
+          <th class="px-4 py-3">ESTADO</th>
+          <th class="px-4 py-3">ACCIÓN</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (isLoading()) {
+          @for (i of [1,2,3,4,5]; track i) {
+            <tr class="bg-surface-200">
+              <td colspan="5" class="px-4 py-4">
+                <div class="h-4 w-full animate-pulse rounded bg-surface-300"></div>
+              </td>
+            </tr>
+          }
+        } @else if (administradores().length === 0) {
+          <tr class="bg-surface-200">
+            <td colspan="5" class="px-4 py-12 text-surface-400">
+              <i class="pi pi-inbox mb-3 text-4xl block"></i>
+              No se encontraron administradores.
+            </td>
+          </tr>
+        } @else {
+          @for (adm of administradores(); track adm.id_administrador) {
+            <tr class="bg-surface-200 text-black transition-colors hover:bg-surface-300">
+              <td class="px-4 py-3">{{ adm.id_administrador }}</td>
+              <td class="px-4 py-3">{{ adm.nombre ?? '-' }}</td>
+              <td class="px-4 py-3 font-mono text-xs">{{ adm.username }}</td>
+              <td class="px-4 py-3">
+                <span
+                  class="inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold"
+                  [class]="adm.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
+                >
+                  {{ adm.is_active ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex items-center justify-center gap-2">
+                  <p-button icon="pi pi-eye" severity="secondary" size="small"
+                    [pt]="{ root: { class: 'w-8 h-8' } }"
+                    (click)="verAdministrador(adm.id_administrador)"
+                  />
+                  <p-button icon="pi pi-times" severity="danger" size="small"
+                    [pt]="{ root: { class: 'w-8 h-8' } }"
+                    [disabled]="!adm.is_active"
+                    (click)="confirmarInactivar(adm.id_administrador, adm.nombre ?? adm.username)"
+                  />
+                </div>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación -->
+  @if (paginador()) {
+    <p-paginator
+      [first]="paginaActual()"
+      [rows]="pageSize()"
+      [rowsPerPageOptions]="[10, 50, 100]"
+      [totalRecords]="totalRegistros()"
+      [showFirstLastIcon]="true"
+      [showPageLinks]="true"
+      (onPageChange)="onPageChange($event)"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Total {totalRecords} administradores"
+    />
+  }
+
+</div>

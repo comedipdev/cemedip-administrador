@@ -1,0 +1,89 @@
+<div class="flex flex-col gap-6">
+
+  <!-- Encabezado -->
+  <div class="flex items-center gap-3">
+    <a routerLink="/seguridad/administradores"
+       class="text-surface-500 hover:text-primary transition-colors">
+      <i class="pi pi-chevron-left text-lg"></i>
+    </a>
+    <h1 class="text-2xl font-bold tracking-wide text-surface-700">
+      {{ esNuevo() ? 'NUEVO ADMINISTRADOR' : 'DETALLES DEL ADMINISTRADOR' }}
+    </h1>
+  </div>
+
+  @if (isLoading()) {
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      @for (f of skeletonFields; track $index) {
+        <app-skeleton-field />
+      }
+    </div>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="guardar()"
+          class="flex flex-col gap-6 transition-opacity duration-200"
+          [class.app-form-busy]="isSaving()">
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
+        <!-- Nombre -->
+        <div class="flex flex-col gap-1">
+          <label for="af_nombre" class="text-xs font-semibold tracking-wide text-surface-500">
+            NOMBRE <span class="font-normal text-surface-400">(Opcional)</span>
+          </label>
+          <input id="af_nombre" pInputText formControlName="nombre" placeholder="Nombre completo" />
+        </div>
+
+        <!-- Usuario -->
+        <div class="flex flex-col gap-1">
+          <label for="af_username" class="text-xs font-semibold tracking-wide text-surface-500">USUARIO</label>
+          <input
+            id="af_username"
+            pInputText
+            formControlName="username"
+            placeholder="nombre.usuario"
+            [class.border-red-400]="fieldInvalid('username')"
+          />
+          @if (fieldInvalid('username')) {
+            <span class="app-form-error text-xs">El nombre de usuario es requerido.</span>
+          } @else if (esNuevo()) {
+            <p class="ml-1 text-[10px] text-surface-400">Se enviará un correo con la contraseña generada automáticamente.</p>
+          }
+        </div>
+
+        <!-- Estado — solo en edición -->
+        @if (!esNuevo()) {
+          <div class="flex flex-col gap-1 sm:col-span-2">
+            <span class="text-xs font-semibold tracking-wide text-surface-500">ESTADO DE LA CUENTA</span>
+            <div class="flex h-14 items-center gap-3 rounded-xl border border-surface-200 bg-surface-50 px-5">
+              <span
+                class="inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold"
+                [class]="isActive() ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
+              >
+                {{ isActive() ? 'Activo' : 'Inactivo' }}
+              </span>
+              <p-button
+                type="button"
+                [label]="isActive() ? 'Desactivar' : 'Activar'"
+                [severity]="isActive() ? 'danger' : 'success'"
+                size="small"
+                [loading]="isToggling()"
+                (click)="toggleActivo()"
+              />
+            </div>
+          </div>
+        }
+
+      </div>
+
+      <!-- Acciones -->
+      <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+        <p-button
+          type="submit"
+          [label]="esNuevo() ? 'Crear Administrador' : 'Guardar Cambios'"
+          [loading]="isSaving()"
+        />
+      </div>
+
+    </form>
+  }
+
+</div>

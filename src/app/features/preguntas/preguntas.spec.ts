@@ -90,7 +90,7 @@ describe('PreguntasComponent', () => {
 
     const hostElement = fixture.nativeElement as HTMLElement;
     const truncatedCell = hostElement.querySelector<HTMLSpanElement>(
-      'tbody tr td:nth-child(2) span',
+      'tbody tr td:nth-child(3) span',
     );
 
     expect(truncatedCell).not.toBeNull();
@@ -105,6 +105,7 @@ describe('PreguntasComponent', () => {
     await fixture.whenStable();
 
     component['filtrosForm'].setValue({
+      codigo: '',
       enunciado: 'aborto',
       alternativa: '',
       respuesta: '',

@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_BASE_URL } from '@core/constants/api';
 import { ApiSuccessResponse } from '@core/models/api.model';
-import { Estudiante, EstudianteCreateInput, EstudianteDetalle, EstudiantesFiltros, EstudianteUpdateInput } from '@core/models/seguridad.model';
+import { Administrador, AdministradorCreateInput, AdministradorDetalle, AdministradoresFiltros, AdministradorUpdateInput, Estudiante, EstudianteCreateInput, EstudianteDetalle, EstudiantesFiltros, EstudianteUpdateInput } from '@core/models/seguridad.model';
 
 @Injectable({ providedIn: 'root' })
 export class SeguridadService {
@@ -65,6 +65,53 @@ export class SeguridadService {
     return this.http.post<ApiSuccessResponse<{ creados: number; actualizados: number; errores: string[] }>>(
       `${API_BASE_URL}/admin/seguridad/carga-masiva-estudiantes/`,
       formData,
+    );
+  }
+
+  getAdministradores(filtros: AdministradoresFiltros): Observable<ApiSuccessResponse<Administrador[]>> {
+    let params = new HttpParams();
+    if (filtros.page) params = params.set('page', filtros.page);
+    if (filtros.page_size) params = params.set('page_size', filtros.page_size);
+    if (filtros.nombre) params = params.set('nombre', filtros.nombre);
+    if (filtros.is_activo !== undefined) params = params.set('is_activo', filtros.is_activo.toString());
+
+    return this.http.get<ApiSuccessResponse<Administrador[]>>(
+      `${API_BASE_URL}/admin/seguridad/administradores/`,
+      { params },
+    );
+  }
+
+  getAdministrador(id: number): Observable<ApiSuccessResponse<AdministradorDetalle>> {
+    return this.http.get<ApiSuccessResponse<AdministradorDetalle>>(
+      `${API_BASE_URL}/admin/seguridad/administradores/${id}/`,
+    );
+  }
+
+  crearAdministrador(data: AdministradorCreateInput): Observable<ApiSuccessResponse<AdministradorDetalle>> {
+    return this.http.post<ApiSuccessResponse<AdministradorDetalle>>(
+      `${API_BASE_URL}/admin/seguridad/administradores/`,
+      data,
+    );
+  }
+
+  actualizarAdministrador(id: number, data: AdministradorUpdateInput): Observable<ApiSuccessResponse<AdministradorDetalle>> {
+    return this.http.put<ApiSuccessResponse<AdministradorDetalle>>(
+      `${API_BASE_URL}/admin/seguridad/administradores/${id}/`,
+      data,
+    );
+  }
+
+  activarAdministrador(id: number): Observable<ApiSuccessResponse<void>> {
+    return this.http.post<ApiSuccessResponse<void>>(
+      `${API_BASE_URL}/admin/seguridad/administradores/${id}/activar/`,
+      {},
+    );
+  }
+
+  inactivarAdministrador(id: number): Observable<ApiSuccessResponse<void>> {
+    return this.http.post<ApiSuccessResponse<void>>(
+      `${API_BASE_URL}/admin/seguridad/administradores/${id}/inactivar/`,
+      {},
     );
   }
 }

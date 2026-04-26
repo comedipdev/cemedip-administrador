@@ -61,3 +61,34 @@ export interface EstudiantesFiltros {
   id_estudiante?: number;
   is_activo?: boolean;
 }
+
+export interface Administrador {
+  id_administrador: number;
+  nombre: string | null;
+  username: string;
+  is_active: boolean;
+}
+
+export interface AdministradorDetalle {
+  id_administrador: number;
+  nombre: string | null;
+  username: string;
+  is_active: boolean;
+}
+
+export interface AdministradorCreateInput {
+  nombre?: string | null;
+  username: string;
+}
+
+export interface AdministradorUpdateInput {
+  nombre?: string | null;
+  username?: string | null;
+}
+
+export interface AdministradoresFiltros {
+  page?: number;
+  page_size?: number;
+  nombre?: string;
+  is_activo?: boolean;
+}
