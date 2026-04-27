@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { catchError, map } from 'rxjs/operators';
@@ -18,6 +18,15 @@ import { extractApiErrorMessage } from '@core/models/api.model';
 import { ExamenFormInput, ExamenPreguntaItem } from '@core/models/evaluaciones.model';
 
 interface OptionItem { label: string; value: number; }
+
+function fechasValidator(group: AbstractControl): ValidationErrors | null {
+  const inicio = group.get('fecha_inicio')?.value as Date | null;
+  const entrega = group.get('fecha_entrega')?.value as Date | null;
+  if (inicio && entrega && entrega <= inicio) {
+    return { fechaEntregaInvalida: true };
+  }
+  return null;
+}
 
 const ESTADO_EXAMEN_LABELS: Record<string, string> = {
   proximo: 'Próximo',
@@ -101,7 +110,7 @@ export class ExamenConfiguracionComponent implements OnInit {
     duracion_minutos: [null as number | null, [Validators.required, Validators.min(1)]],
     puntaje_maximo: [null as number | null, [Validators.required, Validators.min(0)]],
     es_activo: [true],
-  });
+  }, { validators: fechasValidator });
 
   protected readonly agregarForm: FormGroup = this.fb.group({
     especialidad_id: [null as number | null, [Validators.required]],
