@@ -154,3 +154,38 @@ export interface ExamenResultadosData {
   preguntas: ExamenResultadoPregunta[];
   intentos: ExamenResultadoIntento[];
 }
+
+export interface GraficosPeriodo {
+  label: string;
+  intentos: number;
+  preguntas: number;
+  tiempo_segundos: number;
+  estudiantes_activos: number;
+}
+
+export interface GraficoEstudiante {
+  nombres: string;
+  apellidos: string;
+  identificacion: string;
+  total_preguntas?: number;
+  total_intentos: number;
+  porcentaje_promedio?: number;
+}
+
+export interface GraficosEspecialidad {
+  especialidad: string;
+  correctas: number;
+  incorrectas: number;
+}
+
+export interface GraficosEspecialidadesPeriodo {
+  label: string;
+  data: GraficosEspecialidad[];
+}
+
+export interface GraficosData {
+  periodos: GraficosPeriodo[];
+  top_practicantes: GraficoEstudiante[];
+  top_rendimiento: GraficoEstudiante[];
+  especialidades_periodos: GraficosEspecialidadesPeriodo[];
+}

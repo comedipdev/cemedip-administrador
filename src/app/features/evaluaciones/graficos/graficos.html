@@ -1,0 +1,103 @@
+<div class="flex flex-col gap-6">
+
+  <!-- Encabezado -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold tracking-wide text-surface-700">GRÁFICOS</h1>
+  </div>
+
+  @if (isLoading()) {
+    <div class="flex items-center justify-center py-16">
+      <i class="pi pi-spin pi-spinner text-3xl text-primary"></i>
+    </div>
+  } @else if (data()) {
+
+    <!-- KPIs de hoy -->
+    @let periodo = hoy();
+    @if (periodo) {
+      <div>
+        <p class="mb-3 text-xs font-semibold tracking-wide text-surface-500">HOY</p>
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div class="flex flex-col gap-1 rounded-xl bg-surface-50 p-4 shadow-sm">
+            <span class="text-xs font-semibold tracking-wide text-surface-400">INTENTOS</span>
+            <span class="text-2xl font-bold text-surface-700">{{ periodo.intentos }}</span>
+          </div>
+          <div class="flex flex-col gap-1 rounded-xl bg-surface-50 p-4 shadow-sm">
+            <span class="text-xs font-semibold tracking-wide text-surface-400">PREGUNTAS</span>
+            <span class="text-2xl font-bold text-surface-700">{{ periodo.preguntas }}</span>
+          </div>
+          <div class="flex flex-col gap-1 rounded-xl bg-surface-50 p-4 shadow-sm">
+            <span class="text-xs font-semibold tracking-wide text-surface-400">TIEMPO</span>
+            <span class="text-2xl font-bold text-surface-700">{{ formatTiempo(periodo.tiempo_segundos) }}</span>
+          </div>
+          <div class="flex flex-col gap-1 rounded-xl bg-surface-50 p-4 shadow-sm">
+            <span class="text-xs font-semibold tracking-wide text-surface-400">ESTUDIANTES</span>
+            <span class="text-2xl font-bold text-surface-700">{{ periodo.estudiantes_activos }}</span>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Preguntas + Intentos + Tiempo -->
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div class="flex flex-col gap-2 rounded-xl bg-surface-50 p-4 shadow-sm">
+        <p class="text-xs font-semibold tracking-wide text-surface-500">PREGUNTAS PRACTICADAS</p>
+        <div class="relative h-56">
+          <canvas #preguntasCanvas></canvas>
+        </div>
+      </div>
+      <div class="flex flex-col gap-2 rounded-xl bg-surface-50 p-4 shadow-sm">
+        <p class="text-xs font-semibold tracking-wide text-surface-500">INTENTOS</p>
+        <div class="relative h-56">
+          <canvas #intentosCanvas></canvas>
+        </div>
+      </div>
+      <div class="flex flex-col gap-2 rounded-xl bg-surface-50 p-4 shadow-sm">
+        <p class="text-xs font-semibold tracking-wide text-surface-500">TIEMPO INVERTIDO</p>
+        <div class="relative h-56">
+          <canvas #tiempoCanvas></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preguntas por especialidad -->
+    <div class="flex flex-col gap-3 rounded-xl bg-surface-50 p-4 shadow-sm">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <p class="text-xs font-semibold tracking-wide text-surface-500">PREGUNTAS POR ESPECIALIDAD</p>
+        <div class="flex gap-1">
+          @for (ep of data()!.especialidades_periodos; track ep.label; let i = $index) {
+            <button
+              (click)="selectedPeriodo.set(i)"
+              class="rounded-lg px-3 py-1 text-xs font-semibold transition-colors"
+              [class]="selectedPeriodo() === i
+                ? 'bg-primary text-white'
+                : 'bg-surface-200 text-surface-600 hover:bg-surface-300'"
+            >
+              {{ ep.label }}
+            </button>
+          }
+        </div>
+      </div>
+      <div class="relative h-72">
+        <canvas #especialidadCanvas></canvas>
+      </div>
+    </div>
+
+    <!-- Top practicantes + rendimiento -->
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div class="flex flex-col gap-2 rounded-xl bg-surface-50 p-4 shadow-sm">
+        <p class="text-xs font-semibold tracking-wide text-surface-500">TOP PRACTICANTES (por preguntas)</p>
+        <div class="relative h-72">
+          <canvas #practicanteCanvas></canvas>
+        </div>
+      </div>
+      <div class="flex flex-col gap-2 rounded-xl bg-surface-50 p-4 shadow-sm">
+        <p class="text-xs font-semibold tracking-wide text-surface-500">TOP RENDIMIENTO (% promedio)</p>
+        <div class="relative h-72">
+          <canvas #rendimientoCanvas></canvas>
+        </div>
+      </div>
+    </div>
+
+  }
+
+</div>

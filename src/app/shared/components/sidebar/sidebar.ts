@@ -100,6 +100,12 @@ import { NgOptimizedImage } from '@angular/common';
                 <i class="pi pi-list-check text-sm"></i>
                 Intentos
               </a>
+              <a routerLink="/evaluaciones/graficos" routerLinkActive="text-primary font-semibold bg-primary/10 hover:bg-primary/20"
+                class="flex items-center gap-2 mx-2 px-3 py-2 rounded-xl text-sm text-surface-500 hover:bg-surface-100 hover:text-surface-700 transition-colors"
+                (click)="navItemClick.emit()">
+                <i class="pi pi-chart-bar text-sm"></i>
+                Gráficos
+              </a>
             </div>
           }
         </div>
