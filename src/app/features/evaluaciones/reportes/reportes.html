@@ -223,8 +223,9 @@
       @if (r.estado_reporte === 'sin_respuesta') {
         <div class="flex flex-col gap-3 border-t border-surface-200 pt-4">
           <div>
-            <label class="mb-1 block text-xs font-semibold tracking-wide text-surface-400">RESPUESTA (opcional)</label>
+            <label for="resolver-respuesta" class="mb-1 block text-xs font-semibold tracking-wide text-surface-400">RESPUESTA (opcional)</label>
             <textarea
+              id="resolver-respuesta"
               rows="3"
               placeholder="Agregar respuesta o solución..."
               class="w-full rounded-lg border border-surface-300 px-3 py-2 text-sm text-surface-700 focus:border-primary focus:outline-none"
