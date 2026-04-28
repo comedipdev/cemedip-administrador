@@ -1,3 +1,3 @@
 export const environment = {
-  apiBaseUrl: 'https://api.cemedip.net',
+  apiBaseUrl: 'http://localhost:8000',
 };

@@ -94,6 +94,16 @@ export class EvaluacionesService {
     );
   }
 
+  agregarPreguntaIndividual(
+    idExamen: number,
+    preguntaId: number,
+  ): Observable<ApiSuccessResponse<ExamenDetalle>> {
+    return this.http.post<ApiSuccessResponse<ExamenDetalle>>(
+      `${API_BASE_URL}/admin/evaluaciones/examenes/${idExamen}/preguntas/individual/`,
+      { pregunta_id: preguntaId },
+    );
+  }
+
   quitarPreguntaExamen(
     idExamen: number,
     idExamenPregunta: number,

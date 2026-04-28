@@ -185,6 +185,9 @@
         }
       </div>
 
+      <!-- Agregar por especialidad / individual (solo si puede editar) -->
+      @if (puedeEditar()) {
+
       <!-- Agregar por especialidad -->
       <div class="flex flex-col gap-2 p-4 rounded-lg bg-surface-100">
         <span class="text-xs font-semibold tracking-wide text-surface-500">AGREGAR PREGUNTAS POR ESPECIALIDAD</span>
@@ -220,6 +223,110 @@
           />
         </div>
       </div>
+
+      <!-- Agregar pregunta individual -->
+      <div class="flex flex-col gap-3 p-4 rounded-lg bg-surface-100">
+        <span class="text-xs font-semibold tracking-wide text-surface-500">AGREGAR PREGUNTA INDIVIDUAL</span>
+
+        <!-- Filtros -->
+        <div class="flex items-end gap-3 flex-wrap">
+          <div class="flex flex-col gap-1 w-36">
+            <label for="banco-codigo" class="text-xs font-semibold tracking-wide text-surface-500">CÓDIGO</label>
+            <input
+              id="banco-codigo"
+              pInputText
+              [value]="bancoFilterCodigo()"
+              (input)="bancoFilterCodigo.set($any($event.target).value)"
+              (keyup.enter)="buscarEnBanco()"
+              placeholder="Ej. MED-001"
+            />
+          </div>
+          <div class="flex flex-col gap-1 flex-1 min-w-36">
+            <label for="banco-especialidad" class="text-xs font-semibold tracking-wide text-surface-500">ESPECIALIDAD</label>
+            <p-select
+              inputId="banco-especialidad"
+              [ngModel]="bancoFilterEspecialidad()"
+              (ngModelChange)="bancoFilterEspecialidad.set($event)"
+              [options]="especialidadOpciones()"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Todas"
+              [showClear]="true"
+              styleClass="w-full"
+            />
+          </div>
+          <div class="flex flex-col gap-1 flex-1 min-w-48">
+            <label for="banco-enunciado" class="text-xs font-semibold tracking-wide text-surface-500">ENUNCIADO</label>
+            <input
+              id="banco-enunciado"
+              pInputText
+              [value]="bancoFilterEnunciado()"
+              (input)="bancoFilterEnunciado.set($any($event.target).value)"
+              (keyup.enter)="buscarEnBanco()"
+              placeholder="Buscar en enunciado"
+            />
+          </div>
+          <p-button label="Buscar" icon="pi pi-search" (click)="buscarEnBanco()" />
+        </div>
+
+        <!-- Resultados -->
+        @if (preguntasBancoResource.isLoading()) {
+          <div class="flex justify-center py-6">
+            <i class="pi pi-spinner pi-spin text-2xl text-primary"></i>
+          </div>
+        } @else if (preguntasBanco().length > 0) {
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm border-separate border-spacing-y-1 min-w-[700px]">
+              <thead>
+                <tr class="bg-primary text-white font-semibold tracking-wide text-left">
+                  <th class="px-3 py-2 w-28">CÓDIGO</th>
+                  <th class="px-3 py-2 w-36">ESPECIALIDAD</th>
+                  <th class="px-3 py-2">ENUNCIADO</th>
+                  <th class="px-3 py-2 w-24 text-center">ACCIÓN</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (p of preguntasBanco(); track p.id_pregunta) {
+                  <tr class="bg-surface-200 hover:bg-surface-300 transition-colors text-left">
+                    <td class="px-3 py-2 font-mono text-xs text-surface-500">{{ p.codigo ?? '-' }}</td>
+                    <td class="px-3 py-2 text-xs">{{ p.especialidad ?? '-' }}</td>
+                    <td class="px-3 py-2 text-xs leading-5">
+                      {{ p.enunciado.length > 150 ? p.enunciado.substring(0, 150) + '...' : p.enunciado }}
+                    </td>
+                    <td class="px-3 py-2 text-center">
+                      @if (preguntasEnExamenIds().has(p.id_pregunta)) {
+                        <span class="text-[10px] text-surface-400 font-semibold">YA AGREGADA</span>
+                      } @else {
+                        <p-button
+                          icon="pi pi-plus"
+                          size="small"
+                          [pt]="{ root: { class: 'w-7 h-7' } }"
+                          [loading]="isAddingPreguntaId() === p.id_pregunta"
+                          [disabled]="isAddingPreguntaId() !== null"
+                          (click)="agregarPreguntaIndividual(p.id_pregunta)"
+                        />
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <p-paginator
+            [rows]="10"
+            [totalRecords]="preguntasBancoTotal()"
+            [first]="preguntasBancoPrimerItem()"
+            (onPageChange)="onBancoPaginate($event)"
+          />
+        } @else {
+          <div class="flex flex-col items-center py-6 text-surface-400 gap-2">
+            <i class="pi pi-search text-2xl"></i>
+            <span class="text-sm">No se encontraron preguntas con esos filtros.</span>
+          </div>
+        }
+      </div>
+
+      } <!-- fin @if puedeEditar -->
 
       <!-- Tabla de preguntas -->
       @if (preguntas().length > 0) {

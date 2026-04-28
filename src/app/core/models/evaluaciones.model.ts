@@ -68,6 +68,7 @@ export interface IntentosFiltros {
 
 export interface ExamenPreguntaItem {
   id_examen_pregunta: number;
+  pregunta_id: number | null;
   orden: number;
   especialidad: string | null;
   codigo: string | null;

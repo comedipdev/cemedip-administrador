@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AbstractControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormsModule, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { catchError, map } from 'rxjs/operators';
@@ -9,13 +9,15 @@ import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { EvaluacionesService } from '@core/services/evaluaciones.service';
 import { ToastService } from '@core/services/toast.service';
 import { PreguntasService } from '@features/preguntas/services/preguntas.service';
-import { extractApiErrorMessage } from '@core/models/api.model';
+import { ApiSuccessResponse, extractApiErrorMessage } from '@core/models/api.model';
 import { ExamenFormInput, ExamenPreguntaItem } from '@core/models/evaluaciones.model';
+import { PreguntaListadoItem, PreguntasFiltros } from '@core/models/preguntas.model';
 
 interface OptionItem { label: string; value: number; }
 
@@ -37,11 +39,13 @@ const ESTADO_EXAMEN_LABELS: Record<string, string> = {
 @Component({
   selector: 'app-examen-configuracion',
   imports: [
+    FormsModule,
     ReactiveFormsModule,
     ButtonModule,
     DatePickerModule,
     InputTextModule,
     InputNumberModule,
+    PaginatorModule,
     SelectModule,
     TextareaModule,
   ],
@@ -101,6 +105,43 @@ export class ExamenConfiguracionComponent implements OnInit {
   protected readonly totalPreguntas = computed(() => this.preguntas().length);
   protected readonly puedeEditar = computed(() => this.estadoExamen() === 'proximo');
 
+  // ── Banco de preguntas ──
+  protected readonly bancoFilterCodigo = signal('');
+  protected readonly bancoFilterEnunciado = signal('');
+  protected readonly bancoFilterEspecialidad = signal<number | null>(null);
+  private readonly bancoBusqueda = signal<PreguntasFiltros & { _idExamen: number | null }>({
+    page: 1, page_size: 5, _idExamen: null,
+  });
+  protected readonly isAddingPreguntaId = signal<number | null>(null);
+
+  private readonly emptyBancoResponse: ApiSuccessResponse<PreguntaListadoItem[]> = {
+    statusCode: 200, status: 'success', data: [], total_data: 0,
+  };
+
+  protected readonly preguntasBancoResource = rxResource({
+    params: () => this.bancoBusqueda(),
+    stream: ({ params }) => {
+      if (!params._idExamen) return of(this.emptyBancoResponse);
+      const filtros: PreguntasFiltros = { page: params.page, page_size: 5 };
+      if (params.codigo) filtros.codigo = params.codigo;
+      if (params.enunciado) filtros.enunciado = params.enunciado;
+      if (params.especialidad?.length) filtros.especialidad = params.especialidad;
+      return this.preguntasService.getPreguntas(filtros).pipe(
+        catchError(() => of(this.emptyBancoResponse)),
+      );
+    },
+  });
+
+  protected readonly preguntasBanco = computed(() => this.preguntasBancoResource.value()?.data ?? []);
+  protected readonly preguntasBancoTotal = computed(() => this.preguntasBancoResource.value()?.total_data ?? 0);
+  protected readonly preguntasBancoPrimerItem = computed(() => {
+    const p = this.bancoBusqueda().page ?? 1;
+    return (p - 1) * 10;
+  });
+  protected readonly preguntasEnExamenIds = computed(
+    () => new Set(this.preguntas().map(p => p.pregunta_id).filter((id): id is number => id !== null)),
+  );
+
   protected readonly form = this.fb.group({
     nombre: ['', [Validators.required]],
     descripcion: ['' as string],
@@ -142,6 +183,7 @@ export class ExamenConfiguracionComponent implements OnInit {
           es_activo: e.es_activo,
         });
         this.preguntas.set(e.preguntas ?? []);
+        this.bancoBusqueda.set({ page: 1, page_size: 5, _idExamen: id });
         this.isLoading.set(false);
       },
       error: (err: HttpErrorResponse) => {
@@ -231,6 +273,38 @@ export class ExamenConfiguracionComponent implements OnInit {
       },
       error: (err: HttpErrorResponse) => {
         this.toast.error(extractApiErrorMessage(err));
+      },
+    });
+  }
+
+  buscarEnBanco() {
+    this.bancoBusqueda.set({
+      page: 1,
+      page_size: 5,
+      _idExamen: this.idExamen(),
+      ...(this.bancoFilterCodigo().trim() ? { codigo: this.bancoFilterCodigo().trim() } : {}),
+      ...(this.bancoFilterEnunciado().trim() ? { enunciado: this.bancoFilterEnunciado().trim() } : {}),
+      ...(this.bancoFilterEspecialidad() !== null ? { especialidad: [this.bancoFilterEspecialidad()!] } : {}),
+    });
+  }
+
+  onBancoPaginate(event: PaginatorState) {
+    this.bancoBusqueda.update(b => ({ ...b, page: (event.page ?? 0) + 1 }));
+  }
+
+  agregarPreguntaIndividual(idPregunta: number) {
+    if (this.isAddingPreguntaId() !== null) return;
+    const id = this.idExamen()!;
+    this.isAddingPreguntaId.set(idPregunta);
+    this.evaluacionesService.agregarPreguntaIndividual(id, idPregunta).subscribe({
+      next: (res) => {
+        this.isAddingPreguntaId.set(null);
+        this.preguntas.set(res.data.preguntas ?? []);
+        this.toast.success('Pregunta agregada al examen.');
+      },
+      error: (err: HttpErrorResponse) => {
+        this.toast.error(extractApiErrorMessage(err));
+        this.isAddingPreguntaId.set(null);
       },
     });
   }

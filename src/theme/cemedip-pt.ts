@@ -24,7 +24,7 @@ export const CemedipPT = {
   },
   select: {
     root: {
-      class: 'rounded-xl shadow-none transition-colors border border-surface-200',
+      class: 'h-14 rounded-xl shadow-none transition-colors border border-surface-200',
     },
     label: {
       class: 'flex items-center text-base font-medium text-surface-600',
