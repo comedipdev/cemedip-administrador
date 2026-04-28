@@ -80,7 +80,7 @@ export interface Examen {
   usuario_creacion: string | null;
   nombre: string;
   especialidades: { nombre: string; cantidad: number }[];
-  estado_examen: 'proximo' | 'en_prgoreso' | 'finalizado';
+  estado_examen: 'proximo' | 'en_progreso' | 'finalizado';
   puntaje_maximo: string;
   numero_preguntas: number;
   intentos_entregados: number;

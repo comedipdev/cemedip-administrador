@@ -32,7 +32,7 @@ function fechasValidator(group: AbstractControl): ValidationErrors | null {
 
 const ESTADO_EXAMEN_LABELS: Record<string, string> = {
   proximo: 'Próximo',
-  en_prgoreso: 'En Progreso',
+  en_progreso: 'En Progreso',
   finalizado: 'Finalizado',
 };
 

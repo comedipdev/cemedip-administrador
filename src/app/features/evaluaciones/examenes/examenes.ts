@@ -115,13 +115,13 @@ export class ExamenesComponent {
 
   estadoLabel(estado: string): string {
     if (estado === 'proximo') return 'Próximo';
-    if (estado === 'en_prgoreso') return 'En Progreso';
+    if (estado === 'en_progreso') return 'En Progreso';
     return 'Finalizado';
   }
 
   estadoClass(estado: string): string {
     if (estado === 'proximo') return 'bg-blue-500';
-    if (estado === 'en_prgoreso') return 'bg-teal-500';
+    if (estado === 'en_progreso') return 'bg-teal-500';
     return 'bg-surface-400';
   }
 }
